@@ -1,0 +1,25 @@
+-- 1. عرض جميع قواعد البيانات
+SHOW DATABASES;
+
+-- 2. اختيار قاعدة بيانات للعمل عليها (مثلاً: university_guide)
+USE university_guide;
+
+-- 3. عرض جميع الجداول في قاعدة البيانات المحددة
+SHOW TABLES;
+
+-- 4. عرض أعمدة جدول معيّن (مثلاً: users)
+DESCRIBE users;
+-- أو
+SHOW COLUMNS FROM users;
+
+-- 5. عرض أول 10 صفوف من جدول (مثلاً: users)
+SELECT * FROM users LIMIT 10;
+
+-- 6. عرض جميع البيانات من جدول (إذا كانت قليلة)
+SELECT * FROM users;
+
+-- 7. عدد الصفوف في جدول معين
+SELECT COUNT(*) FROM users;
+
+-- 8. عرض أول صفين فقط
+SELECT * FROM users LIMIT 2;
