@@ -1,0 +1,6 @@
+=>implements commands in termenal 
+    docker-compose exec app bash 
+    root@459508bc0082:/var/www# (commands)
+    example: 
+    root@459508bc0082:/var/www# php artisan make:controller TestController
+    
