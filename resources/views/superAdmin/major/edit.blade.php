@@ -11,21 +11,7 @@
                 <form action="{{ route('super_admin.major.update', $major->id) }}" method="POST">
                     @csrf
                     @method('PUT')
-                    <div class="mb-3">
-                        <label for="college_id" class="form-label">الكلية</label>
-                        <select name="college_id" id="college_id" class="form-select @error('college_id') is-invalid @enderror">
-                            <option value="">اختر الكلية</option>
-                            @foreach($colleges as $college)
-                                <option value="{{ $college->id }}" 
-                                    {{ (old('college_id', $major->college_id) == $college->id) ? 'selected' : '' }}>
-                                    {{ $college->name_ar }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('college_id')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
+
                     <div class="mb-3">
                         <label for="name_ar" class="form-label">اسم التخصص (عربي)</label>
                         <input type="text" name="name_ar" id="name_ar" class="form-control @error('name_ar') is-invalid @enderror" value="{{ old('name_ar', $major->name_ar) }}">
@@ -52,6 +38,22 @@
                         <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror" rows="3">{{ old('description', $major->description) }}</textarea>
                         @error('description')
                             <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label for="colleges" class="form-label">اختر الكليات التي يتبع لها هذا التخصص:</label>
+                        <select name="colleges[]" id="colleges" multiple class="form-control @error('colleges') is-invalid @enderror">
+                            @php
+                                $selectedColleges = old('colleges', $major->colleges->pluck('id')->toArray());
+                            @endphp
+                            @foreach($colleges as $college)
+                                <option value="{{ $college->id }}" {{ in_array($college->id, $selectedColleges) ? 'selected' : '' }}>
+                                    {{ $college->name_ar }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('colleges')
+                        <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <button type="submit" class="btn btn-primary">تحديث التخصص</button>

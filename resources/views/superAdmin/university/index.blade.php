@@ -57,6 +57,9 @@
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
+                                    <a href="{{route('super_admin.university.show' , $university->id)}}" class="btn btn-sm btn-info" title="عرض">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
                                 </div>
                             </td>
                         </tr>

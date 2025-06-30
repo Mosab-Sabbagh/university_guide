@@ -10,14 +10,13 @@ class Major extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'college_id',
         'name_ar',
         'name_en',
         'code',
         'description',
     ];
-    public function college()
+    public function colleges()
     {
-        return $this->belongsTo(College::class);
+        return $this->belongsToMany(College::class, 'college_major');
     }
 }

@@ -9,7 +9,6 @@ class College extends Model
 {
     use SoftDeletes;
     protected $fillable = [
-        'university_id',
         'name_ar',
         'name_en',
         'abbreviation',
@@ -17,14 +16,14 @@ class College extends Model
     ];
 
 
-    public function university()
+    public function universities()
     {
-        return $this->belongsTo(University::class);
+        return $this->belongsToMany(University::class, 'university_college');
     }
 
     public function majors()
     {
-        return $this->hasMany(Major::class);
+        return $this->belongsToMany(Major::class, 'college_major');
     }
 
 }

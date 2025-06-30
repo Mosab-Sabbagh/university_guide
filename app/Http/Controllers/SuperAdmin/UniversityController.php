@@ -4,6 +4,7 @@ namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UniversityRequest;
+use App\Models\University;
 use App\Services\SuperAdmin\UniversityService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -110,6 +111,22 @@ class UniversityController extends Controller
             return redirect()
                 ->back()
                 ->with('error', 'حدث خطأ أثناء حذف الجامعة: ' );
+        }
+    }
+
+    /**
+     * عرض جامعة محددة مع الكليات والتخصصات
+     */
+    public function show($university)
+    {
+        try {
+            $university = $this->universityService->getUniversityWithDetails($university);
+            return view('superAdmin.university.show', compact('university'));
+
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('super_admin.university.index')
+                ->with('error', 'حدث خطأ أثناء جلب بيانات الجامعة.');
         }
     }
 }

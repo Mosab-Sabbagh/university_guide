@@ -68,4 +68,9 @@ class UniversityService
             throw $e;
         }
     }
+
+    public function getUniversityWithDetails($university): University
+    {
+        return University::with(['colleges.majors'])->findOrFail($university);
+    }
 }

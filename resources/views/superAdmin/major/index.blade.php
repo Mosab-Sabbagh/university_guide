@@ -30,8 +30,6 @@
                         <tr>
                             <th>الاسم</th>
                             <th>الكود</th>
-                            <th>الكلية</th>
-                            <th>الجامعة</th>
                             <th>الإجراءات</th>
                         </tr>
                     </thead>
@@ -40,8 +38,6 @@
                         <tr>
                             <td>{{ $major->name_ar }}</td>
                             <td>{{ $major->code }}</td>
-                            <td>{{ $major->college->name_ar ?? '-' }}</td>
-                            <td>{{ $major->college->university->name_ar ?? '-' }}</td>
                             <td>
                                 <div class="btn-group" role="group">
                                     <a href="{{ route('super_admin.major.edit', $major->id) }}" class="btn btn-sm btn-warning" title="تعديل">
