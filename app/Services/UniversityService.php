@@ -12,7 +12,11 @@ class UniversityService
 
     public function getUniversityById($id)
     {
-        return University::findOrFail($id);
+        try {
+            return University::findOrFail($id);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            throw $e;
+        }
     }
 
     public function createUniversity(array $data)
