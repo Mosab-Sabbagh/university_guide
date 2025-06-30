@@ -30,8 +30,8 @@
                     <thead>
                         <tr>
                             <th>الاسم</th>
+                            <th>الاسم (الانجليزية)</th>
                             <th>الاختصار</th>
-                            <th> الجامعة</th>
                             <th>الإجراءات</th>
                         </tr>
                     </thead>
@@ -39,8 +39,8 @@
                         @forelse($colleges as $college)
                         <tr>
                             <td>{{ $college->name_ar }}</td>
+                            <td>{{ $college->name_en }}</td>
                             <td>{{ $college->abbreviation }}</td>
-                            <td>{{ $college->university->name_ar }}</td>
                             <td>
                                 <div class="btn-group" role="group">
                                     <a href="{{route('super_admin.college.edit',$college->id)}}" class="btn btn-sm btn-warning" title="تعديل">
@@ -53,6 +53,9 @@
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
+                                    <a href="{{ route('super_admin.college.show', $college->id) }}" class="btn btn-sm btn-info" title="عرض">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
                                 </div>
                             </td>
                         </tr>

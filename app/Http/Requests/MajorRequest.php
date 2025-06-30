@@ -25,20 +25,18 @@ class MajorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'college_id'   => 'required|integer|exists:colleges,id',
             'name_ar'      => 'required|string|max:255',
             'name_en'      => 'required|string|max:255',
-            'code'         => 'required|string|max:50|unique:majors,code',
+            'code'         => 'required|string|max:50',
             'description'  => 'nullable|string',
+            'colleges' => 'nullable|array',
+            'colleges.*' => 'exists:colleges,id',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'college_id.required'   => 'حقل الكلية مطلوب.',
-            'college_id.integer'    => 'يجب أن يكون معرف الكلية رقماً صحيحاً.',
-            'college_id.exists'     => 'الكلية المحددة غير موجودة.',
             'name_ar.required'      => 'حقل الاسم بالعربية مطلوب.',
             'name_ar.string'        => 'يجب أن يكون الاسم بالعربية نصاً.',
             'name_ar.max'           => 'يجب ألا يزيد الاسم بالعربية عن 255 حرفاً.',

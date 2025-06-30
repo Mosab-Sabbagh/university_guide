@@ -24,11 +24,12 @@ class CollegeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'university_id' => 'required|integer|exists:universities,id',
             'name_ar' => 'required|string|max:255',
             'name_en' => 'required|string|max:255',
             'abbreviation' => 'required|string|max:50',
             'description' => 'nullable|string',
+            'universities' => 'nullable|array',
+            'universities.*' => 'exists:universities,id',
         ];
     }
 
@@ -40,9 +41,6 @@ class CollegeRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'university_id.required' => 'حقل الجامعة مطلوب.',
-            'university_id.integer' => 'يجب أن يكون معرف الجامعة رقمًا صحيحًا.',
-            'university_id.exists' => 'الجامعة المحددة غير موجودة.',
             'name_ar.required' => 'الاسم العربي مطلوب.',
             'name_en.required' => 'الاسم الإنجليزي مطلوب.',
             'abbreviation.required' => 'الاختصار مطلوب.',

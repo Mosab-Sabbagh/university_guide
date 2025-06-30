@@ -28,6 +28,10 @@ Route::put('university/{university}',[UniversityController::class,'update'])
 Route::delete('university/{university}',[UniversityController::class,'destroy'])
     ->middleware(['super_admin','auth'])    
     ->name('super_admin.university.destroy');
+Route::get('university/{university}',[UniversityController::class,'show'])
+    ->middleware(['super_admin','auth'])
+    ->name('super_admin.university.show');
+    
 
 Route::get('college',[CollegeController::class,'create'])
     ->middleware(['super_admin','auth'])    
@@ -77,4 +81,7 @@ Route::delete('college/{college}',[CollegeController::class,'destroy'])
         ->middleware(['super_admin', 'auth'])
         ->name('super_admin.major.destroy');
 
+    Route::get('college/{college}', [CollegeController::class, 'show'])
+        ->middleware(['super_admin', 'auth'])
+        ->name('super_admin.college.show');
 

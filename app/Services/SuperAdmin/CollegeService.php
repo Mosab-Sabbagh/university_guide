@@ -6,26 +6,37 @@ class CollegeService
 {
     public function getAllCollegesWithoutPagination()
     {
-        return College::with('university')->get();
+        return College::get();
     }
 
-    public function getAllColleges( $search = null)
+    public function getAllColleges($search = null)
     {
-        $query = College::with('university');
+        $query = College::query();
 
         if ($search) {
-            $query->where('name_ar', 'like', '%' . $search . '%');
+            $query->where('name_ar', 'like', "%{$search}%");
         }
 
-        return $query->paginate( 10)->withQueryString();
+        return $query->paginate(10)->withQueryString();
     }
 
     public function createCollege(array $data)
     {
-        return DB::transaction(function () use ($data) {
+
+        try {
+            DB::beginTransaction();
             $college = College::create($data);
+            
+            if (isset($data['universities'])) {
+                $college->universities()->attach($data['universities']);
+            }
+
+            DB::commit();
             return $college;
-        });
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
     }
 
     public function getCollegeById($id)
@@ -38,6 +49,11 @@ class CollegeService
         try {
             DB::beginTransaction();
             $result = $college->update($data);
+
+            if (isset($data['universities'])) {
+                $college->universities()->sync($data['universities']);
+            }
+
             DB::commit();
             return $result;
         } catch (\Exception $e) {
@@ -57,5 +73,10 @@ class CollegeService
             DB::rollBack();
             throw $e;
         }
+    }
+
+    public function getCollegeWithRelations($id)
+    {
+        return College::with(['majors', 'universities'])->findOrFail($id);
     }
 }

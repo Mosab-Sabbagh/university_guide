@@ -8,13 +8,12 @@ use Illuminate\Support\Facades\DB;
 class MajorService{
     public function getAllMajorsWithoutPagination()
     {
-        return Major::with('college.university')->get();
+        return Major::get();
     }
 
     public function getAllMajors($search = null)
     {
-        // تحديد الاستعلام مع العلاقات college (major) و university (college)
-        $query = Major::with('college.university');
+        $query = Major::query();  
 
         if ($search) {
             $query->where('name_ar', 'like', '%' . $search . '%');
@@ -25,10 +24,20 @@ class MajorService{
 
     public function createMajor(array $data)
     {
-        return DB::transaction(function () use ($data) {
+        try {
+            DB::beginTransaction();
             $major = Major::create($data);
+
+            if (isset($data['colleges'])) {
+                $major->colleges()->attach($data['colleges']);
+            }
+
+            DB::commit();
             return $major;
-        });
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
     }
 
     public function getMajorById($id)
@@ -41,6 +50,11 @@ class MajorService{
         try {
             DB::beginTransaction();
             $result = $major->update($data);
+
+            if (isset($data['colleges'])) {
+                $major->colleges()->sync($data['colleges']);
+            }
+
             DB::commit();
             return $result;
         } catch (\Exception $e) {

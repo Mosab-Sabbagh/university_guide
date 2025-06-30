@@ -91,4 +91,16 @@ class CollegeController extends Controller
                 ->with('error', 'حدث خطأ أثناء حذف الكلية: ' );
         }
     }
+    public function show($college)
+    {
+        try {
+            $college = $this->collegeService->getCollegeWithRelations($college);
+            return view('superAdmin.college.show', compact('college'));
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('super_admin.college.index')
+                ->with('error', 'حدث خطأ أثناء جلب بيانات الكلية: ');
+        }
+    }
+
 }

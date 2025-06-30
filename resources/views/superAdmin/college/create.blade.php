@@ -10,20 +10,6 @@
             <form action="{{ route('super_admin.college.store') }}" method="POST">
                 @csrf
                 <div class="mb-3">
-                    <label for="university_id" class="form-label">الجامعة:</label>
-                    <select class="form-control @error('university_id') is-invalid @enderror" id="university_id" name="university_id" required>
-                        <option value="">اختر الجامعة</option>
-                        @foreach($universities as $university)
-                            <option value="{{ $university->id }}" {{ old('university_id') == $university->id ? 'selected' : '' }}>
-                                {{ $university->name_ar }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('university_id')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-                <div class="mb-3">
                     <label for="name_ar" class="form-label">اسم الكلية (عربي):</label>
                     <input type="text" class="form-control @error('name_ar') is-invalid @enderror" id="name_ar" name="name_ar" value="{{ old('name_ar') }}" required>
                     @error('name_ar')
@@ -51,6 +37,20 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
+                <div class="mb-3">
+                    <label for="universities" class="form-label">اختر الجامعات التي تتوفر فيها هذه الكلية:</label>
+                    <select name="universities[]" id="universities" multiple class="form-control @error('universities') is-invalid @enderror">
+                        @foreach($universities as $university)
+                            <option value="{{ $university->id }}" {{ (collect(old('universities'))->contains($university->id)) ? 'selected' : '' }}>
+                                {{ $university->name_ar }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('universities')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
                 <button type="submit" class="btn btn-primary">إضافة الكلية</button>
                 <a href="{{ route('super_admin.college.index') }}" class="btn btn-secondary">إلغاء</a>
             </form>

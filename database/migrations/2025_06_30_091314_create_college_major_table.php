@@ -11,22 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('majors', function (Blueprint $table) {
+        Schema::create('college_major', function (Blueprint $table) {
             $table->id();
-            $table->string('name_ar');
-            $table->string('name_en')->nullable();
-            $table->string('code')->nullable(); // كود داخلي للتخصص
-            $table->text('description')->nullable();
-            $table->softDeletes();
+            $table->foreignId('college_id')->constrained()->onDelete('cascade');
+            $table->foreignId('major_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('majors');
+        Schema::dropIfExists('college_major');
     }
 };
