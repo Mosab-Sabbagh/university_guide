@@ -73,6 +73,8 @@
                     @enderror
                 </div>
                 <button type="submit" class="btn btn-primary">إضافة الجامعة</button>
+                <a href="{{ route('super_admin.university.index') }}" class="btn btn-secondary">إلغاء</a>
+
             </form>
         </div>
     </div>

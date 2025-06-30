@@ -23,6 +23,7 @@ return new class extends Migration
             $table->date('enrollment_date')->nullable();  // تاريخ الالتحاق
             $table->string('level')->nullable();           // المستوى الأكاديمي (مثلاً سنة أولى)
             $table->string('profile_image')->nullable(); 
+            $table->softDeletes();
             $table->timestamps();
         });
     }

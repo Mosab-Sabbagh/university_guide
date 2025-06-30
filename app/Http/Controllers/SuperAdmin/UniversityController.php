@@ -4,7 +4,7 @@ namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UniversityRequest;
-use App\Services\UniversityService;
+use App\Services\SuperAdmin\UniversityService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -16,16 +16,17 @@ class UniversityController extends Controller
         $this->universityService = $universityService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $universities = $this->universityService->getAllUniversities();
+        $search = $request->input('search');
+        $universities = $this->universityService->getAllUniversities($search);
         return view('superAdmin.university.index',compact('universities'));
     }
+
     public function create()
     {
         return view('superAdmin.university.create');
     }
-
 
     public function store(UniversityRequest $request)
     {

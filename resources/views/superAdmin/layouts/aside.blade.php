@@ -17,6 +17,16 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('super_admin.college.index') }}" class="{{ request()->routeIs('super_admin.college.index') ? 'active' : '' }}">
+                    <i class="fas fa-school ml-2"></i>    الكليات
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('super_admin.major.index') }}" class="{{ request()->routeIs('super_admin.major.index') ? 'active' : '' }}">
+                    <i class="fas fa-book ml-2"></i>    التخصصات 
+                </a>
+            </li>
+            <li>
                 <a href="#" class="">
                     <i class="fas fa-cog ml-2"></i>
                     الإعدادات
