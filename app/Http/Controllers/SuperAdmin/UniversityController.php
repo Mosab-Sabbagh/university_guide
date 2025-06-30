@@ -53,8 +53,18 @@ class UniversityController extends Controller
 
     public function edit($university)
     {
-        $university = $this->universityService->getUniversityById($university);
-        return view('superAdmin.university.edit', compact('university'));
+        try {
+            $university = $this->universityService->getUniversityById($university);
+            return view('superAdmin.university.edit', compact('university'));
+        } catch (\Exception $e) {
+            Log::error('Error fetching university for edit: ' . $e->getMessage(), [
+                'university_id' => $university,
+                'exception' => $e,
+            ]);
+            return redirect()
+                ->route('super_admin.university.index')
+                ->with('error', 'حدث خطأ أثناء جلب بيانات الجامعة للتعديل: ');
+        }
     }
 
     public function update(UniversityRequest $request, $university)
