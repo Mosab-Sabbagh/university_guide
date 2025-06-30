@@ -35,6 +35,12 @@ class UniversityRequest extends FormRequest
             'description' => 'nullable|string',
         ];
     }
+    
+        /**
+     * Get custom error messages for validator errors.
+     *
+     * @return array<string, string>
+     */
 
     public function messages(): array
     {

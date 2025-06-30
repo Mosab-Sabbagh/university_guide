@@ -1,13 +1,24 @@
 <?php 
-namespace App\Services;
+namespace App\Services\SuperAdmin;
 use App\Models\University;
 use Illuminate\Support\Facades\DB;
 
 class UniversityService
 {
-    public function getAllUniversities($perPage = 15)
+    public function getAllUniversities($search = null)
     {
-        return University::paginate($perPage);
+        $query = University::query();
+
+        if ($search) {
+            $query->where('name_ar', 'like', '%' . $search . '%');
+        }
+
+        return $query->paginate(10)->withQueryString();
+    }
+
+    public function getAllUniversitiesWithoutPagination()
+    {
+        return University::get(); 
     }
 
     public function getUniversityById($id)

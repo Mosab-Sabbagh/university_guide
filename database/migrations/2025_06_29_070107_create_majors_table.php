@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name_en')->nullable();
             $table->string('code')->nullable(); // كود داخلي للتخصص
             $table->text('description')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
