@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SuperAdmin\AdminController;
 use App\Http\Controllers\SuperAdmin\CollegeController;
 use App\Http\Controllers\SuperAdmin\MajorController;
 use App\Http\Controllers\SuperAdmin\UniversityController;
@@ -85,3 +86,8 @@ Route::delete('college/{college}',[CollegeController::class,'destroy'])
         ->middleware(['super_admin', 'auth'])
         ->name('super_admin.college.show');
 
+Route::prefix('super-admin')->middleware(['auth', 'super_admin'])->group(function () {
+    Route::get('users', [AdminController::class, 'index'])->name('super_admin.students.index');
+    Route::patch('users/{user}/promote', [AdminController::class, 'promoteToAdmin'])->name('super_admin.admin.promote');
+    Route::patch('/admins/revoke/{user}', [AdminController::class, 'revoke'])->name('super_admin.admin.revoke');
+});
