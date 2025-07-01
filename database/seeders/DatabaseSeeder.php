@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             CollegesSeeder::class,
             MajorsSeeder::class,
             CollegeUniversityMajorSeeder::class,
+            StudentSeeder::class,
         ]);
     }
 }

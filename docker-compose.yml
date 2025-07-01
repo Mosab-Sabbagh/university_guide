@@ -33,6 +33,8 @@ services:
     environment:
       MYSQL_DATABASE: university_guide
       MYSQL_ROOT_PASSWORD: secret
+    ports:
+      - "3306:3306"   # <-- هذا السطر أضفناه الآن
     volumes:
       - mysql-data:/var/lib/mysql
     networks:

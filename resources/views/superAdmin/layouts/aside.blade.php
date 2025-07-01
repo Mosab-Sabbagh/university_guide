@@ -27,6 +27,11 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('super_admin.students.index') }}" class="{{ request()->routeIs('super_admin.students.index') ? 'active' : '' }}">
+                    <i class="fas fa-user-shield ml-2"></i>    المسؤولين     
+                </a>
+            </li>
+            <li>
                 <a href="#" class="">
                     <i class="fas fa-cog ml-2"></i>
                     الإعدادات
