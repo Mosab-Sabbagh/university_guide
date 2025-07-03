@@ -79,4 +79,11 @@ class CollegeService
     {
         return College::with(['majors', 'universities'])->findOrFail($id);
     }
+
+    public function getMajorsByCollegeId($id)
+    {
+        $college = College::with('majors')->findOrFail($id);
+        return $college->majors;
+    }
+
 }

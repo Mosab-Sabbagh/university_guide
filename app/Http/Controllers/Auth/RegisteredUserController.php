@@ -3,8 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Student;
 use App\Models\User;
 use App\Role\UserRole;
+use App\Services\Student\StudentService;
+use App\Services\SuperAdmin\CollegeService;
+use App\Services\SuperAdmin\MajorService;
+use App\Services\SuperAdmin\UniversityService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,9 +23,16 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      */
-    public function create(): View
+    public function create(UniversityService $universityService , CollegeService $collegeService , MajorService $majorService): View
     {
-        return view('auth.register');
+        $universities = $universityService->getAllUniversities();
+        $colleges = $collegeService->getAllColleges();
+        $majors = $majorService->getAllMajors();
+        return view('auth.register' , [
+            'universities' => $universities,
+            'colleges' => $colleges,
+            'majors' => $majors,
+        ]);
     }
 
     /**
@@ -28,8 +40,9 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request , StudentService $studentService): RedirectResponse
     {
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
@@ -42,6 +55,9 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'user_type' => UserRole::STUDENT, // Added user_type field
         ]);
+
+        // Create a new student record
+        $studentService->store($request, $user->id);
 
         event(new Registered($user));
 

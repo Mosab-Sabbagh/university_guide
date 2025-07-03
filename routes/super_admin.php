@@ -3,8 +3,13 @@
 use App\Http\Controllers\SuperAdmin\AdminController;
 use App\Http\Controllers\SuperAdmin\CollegeController;
 use App\Http\Controllers\SuperAdmin\MajorController;
+use App\Http\Controllers\SuperAdmin\SuperAdminDashbordController;
 use App\Http\Controllers\SuperAdmin\UniversityController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('super-admin/dashboard', [SuperAdminDashbordController::class, 'index'])
+    ->middleware(['auth', 'super_admin'])
+    ->name('super_admin.dashboard');
 
 Route::get('university',[UniversityController::class,'create'])
     ->middleware(['super_admin','auth'])    
@@ -58,6 +63,7 @@ Route::delete('college/{college}',[CollegeController::class,'destroy'])
     ->middleware(['super_admin','auth'])
     ->name('super_admin.college.destroy');
 
+
     Route::get('major', [MajorController::class, 'create'])
         ->middleware(['super_admin', 'auth'])
         ->name('super_admin.major.add');
@@ -91,3 +97,9 @@ Route::prefix('super-admin')->middleware(['auth', 'super_admin'])->group(functio
     Route::patch('users/{user}/promote', [AdminController::class, 'promoteToAdmin'])->name('super_admin.admin.promote');
     Route::patch('/admins/revoke/{user}', [AdminController::class, 'revoke'])->name('super_admin.admin.revoke');
 });
+
+
+
+    // student routes 
+    Route::get('/api/universities/{id}/colleges', [UniversityController::class, 'getColleges'])->name('api.university.colleges');
+    Route::get('/api/colleges/{id}/majors', [CollegeController::class, 'getMajors'])->name('api.college.majors');
