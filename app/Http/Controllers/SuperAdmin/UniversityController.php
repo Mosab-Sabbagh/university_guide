@@ -129,4 +129,22 @@ class UniversityController extends Controller
                 ->with('error', 'حدث خطأ أثناء جلب بيانات الجامعة.');
         }
     }
+
+    /**
+     * جلب الكليات الخاصة بجامعة معينة
+     */
+    public function getColleges($id)
+    {
+        try {
+            $university = $this->universityService->getCollegesByUniversityId($id);
+            return response()->json($university, 200); 
+        } catch (\Exception $e) {
+            Log::error('Error fetching colleges for university: ' . $e->getMessage(),
+            [
+                'university_id' => $id,
+                'exception' => $e,
+            ]);
+            return response()->json(['error' => 'حدث خطأ أثناء جلب الكليات.'], 500);
+        }       
+    }       
 }

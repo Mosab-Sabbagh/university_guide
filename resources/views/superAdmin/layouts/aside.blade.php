@@ -5,7 +5,7 @@
         
         <ul class="sidebar-menu">
             <li>
-                <a href="javascript:;" class="">
+                <a href="{{route('super_admin.dashboard')}}" class="{{ request()->routeIs('super_admin.dashboard') ? 'active' : '' }}">
                     <i class="fas fa-home ml-2"></i>
                     الرئيسية
                 </a>

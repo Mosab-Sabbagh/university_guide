@@ -8,6 +8,7 @@ use App\Models\College;
 use App\Services\SuperAdmin\CollegeService;
 use App\Services\SuperAdmin\UniversityService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CollegeController extends Controller
 {
@@ -100,6 +101,20 @@ class CollegeController extends Controller
             return redirect()
                 ->route('super_admin.college.index')
                 ->with('error', 'حدث خطأ أثناء جلب بيانات الكلية: ');
+        }
+    }
+
+    public function getMajors($id)
+    {
+        try {
+            $college = $this->collegeService->getMajorsByCollegeId($id);
+            return response()->json($college, 200);
+        } catch (\Exception $e) {
+            Log::error('Error fetching majors for college: ' . $e->getMessage(), [
+                'college_id' => $id,
+                'exception' => $e,
+            ]);
+            return response()->json(['error' => 'حدث خطأ أثناء جلب التخصصات'], 500);
         }
     }
 
