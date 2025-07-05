@@ -19,3 +19,7 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 require __DIR__.'/super_admin.php';
+
+Route::get('/student', function () {
+    return view('student.teststudent');
+});
