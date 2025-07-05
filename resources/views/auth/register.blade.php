@@ -1,112 +1,191 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
-        @csrf
+<!DOCTYPE html>
+<html lang="ar">
 
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
-        </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            background: #f7fafd;
+        }
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+        .register-card {
+            background: #fff;
+            border-radius: 28px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 40px 32px 32px 32px;
+            direction: rtl;
+        }
 
-        <!-- University -->
-        <div class="mt-4">
-            <x-input-label for="university_id" value="الجامعة" />
-            <select name="university_id" id="university_id" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm">
-            <option value="">اختر الجامعة</option>
-            @foreach($universities as $university)
-                <option value="{{ $university->id }}">{{ $university->name_ar }}</option>
-            @endforeach
-            </select>
-            <x-input-error :messages="$errors->get('university_id')" class="mt-2" />
-        </div>
+        .profile-icon {
+            width: 80px;
+            height: 80px;
+            background: #f0f0f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px auto;
+            font-size: 48px;
+            color: #bdbdbd;
+        }
 
-        <!-- College -->
-        <div class="mt-4">
-            <x-input-label for="college_id" value="الكلية" />
-            <select name="college_id" id="college_id" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm">
-            <option value="">اختر الكلية</option>
-            </select>
-            <x-input-error :messages="$errors->get('college_id')" class="mt-2" />
-        </div>
+        .form-control,
+        .form-select {
+            border-radius: 12px;
+            margin-bottom: 16px;
+            background: #f7fafd;
+            border: 1px solid #e0e0e0;
+        }
 
-        <!-- Major -->
-        <div class="mt-4">
-            <x-input-label for="major_id" value="التخصص" />
-            <select name="major_id" id="major_id" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm">
-            <option value="">اختر التخصص</option>
-            </select>
-            <x-input-error :messages="$errors->get('major_id')" class="mt-2" />
-        </div>
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
 
-        <!-- Student Number -->
-        <div class="mt-4">
-            <x-input-label for="student_number" value="رقم الطالب" />
-            <x-text-input id="student_number" class="block mt-1 w-full" type="text" name="student_number" :value="old('student_number')" required />
-            <x-input-error :messages="$errors->get('student_number')" class="mt-2" />
-        </div>
+        .register-btn {
+            width: 100%;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            padding: 10px 0;
+        }
 
-        <!-- Enrollment Date -->
-        <div class="mt-4">
-            <x-input-label for="enrollment_date" value="تاريخ الالتحاق" />
-            <x-text-input id="enrollment_date" class="block mt-1 w-full" type="date" name="enrollment_date" :value="old('enrollment_date')" required />
-            <x-input-error :messages="$errors->get('enrollment_date')" class="mt-2" />
-        </div>
+        .radio-group {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 16px;
+        }
 
-        <!-- Level -->
-        <div class="mt-4">
-            <x-input-label for="level" value="المستوى" />
-            <select id="level" name="level" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm" required>
-            <option value="">اختر المستوى</option>
-            <option value="المستوى الأول" {{ old('level') == 'المستوى الأول' ? 'selected' : '' }}>المستوى الأول</option>
-            <option value="المستوى الثاني" {{ old('level') == 'المستوى الثاني' ? 'selected' : '' }}>المستوى الثاني</option>
-            <option value="المستوى الثالث" {{ old('level') == 'المستوى الثالث' ? 'selected' : '' }}>المستوى الثالث</option>
-            <option value="المستوى الرابع" {{ old('level') == 'المستوى الرابع' ? 'selected' : '' }}>المستوى الرابع</option>
-            <option value="المستوى الخامس" {{ old('level') == 'المستوى الخامس' ? 'selected' : '' }}>المستوى الخامس</option>
-            <option value="المستوى السادس" {{ old('level') == 'المستوى السادس' ? 'selected' : '' }}>المستوى السادس</option>
-            </select>
-            <x-input-error :messages="$errors->get('level')" class="mt-2" />
-        </div>
+        .radio-group label {
+            margin-bottom: 0;
+            font-weight: 500;
+        }
+    </style>
+</head>
 
-        <!-- Profile Image -->
-        <div class="mt-4">
-            <x-input-label for="profile_image" value="صورة الملف الشخصي" />
-            <x-text-input id="profile_image" class="block mt-1 w-full" type="file" name="profile_image" accept="image/*" />
-            <x-input-error :messages="$errors->get('profile_image')" class="mt-2" />
-        </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-            <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
+<body>
+    <div class="register-card">
+        <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
+            @csrf
+            <a href="{{ url('/') }}">
+                <img src="{{ asset('images/logo.png') }}" alt="شعار المنصة"
+                    style="width: 100px; height: auto; display: block; margin: 0 auto; margin-bottom: 20px;">
             </a>
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+            <h3 class="text-center mb-4" style="font-weight:700;">إنشاء حساب جديد</h3>
 
+            <div class="profile-icon mb-3" id="profilePreview">
+                <i class="fa fa-user"></i>
+            </div>
+            <div class="mb-3 text-center">
+                <input type="file" name="profile_image" id="profileImageInput" accept="image/*" style="display:none;">
+                <button type="button" class="btn btn-outline-secondary btn-sm"
+                    onclick="document.getElementById('profileImageInput').click();">اختر صورة شخصية
+                </button>
+                @error('profile_image') <div class="text-danger mt-2">{{ $message }}</div> @enderror
+            </div>
 
+            <div class="row">
+                <div class="col-md-6">
+                    <input type="text" name="name" class="form-control" placeholder="اسم الطالب رباعي"
+                        value="{{ old('name') }}">
+                    @error('name') <div class="text-danger">{{ $message }}</div> @enderror
+                </div>
+
+                <div class="col-md-6">
+                    <select name="university_id" id="university_id" class="form-control">
+                        <option value="">اختر الجامعة</option>
+                        @foreach($universities as $university)
+                            <option value="{{ $university->id }}" {{ old('university_id') == $university->id ? 'selected' : '' }}>
+                                {{ $university->name_ar }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('university_id') <div class="text-danger">{{ $message }}</div> @enderror
+                </div>
+
+                <div class="col-md-6">
+                    <select name="college_id" id="college_id" class="form-control">
+                        <option value="">اختر الكلية</option>
+                    </select>
+                    @error('college_id') <div class="text-danger">{{ $message }}</div> @enderror
+                </div>
+
+                <div class="col-md-6">
+                    <select name="major_id" id="major_id" class="form-control">
+                        <option value="">اختر التخصص</option>
+                    </select>
+                    @error('major_id') <div class="text-danger">{{ $message }}</div> @enderror
+                </div>
+
+                <div class="col-md-6">
+                    <input type="text" name="student_number" class="form-control" placeholder="الرقم الجامعي"
+                        value="{{ old('student_number') }}">
+                    @error('student_number') <div class="text-danger">{{ $message }}</div> @enderror
+                </div>
+
+                <div class="col-md-6">
+                    <input type="email" name="email" class="form-control" placeholder="البريد الإلكتروني"
+                        value="{{ old('email') }}">
+                    @error('email') <div class="text-danger">{{ $message }}</div> @enderror
+                </div>
+
+                <div class="col-md-6">
+                    <input type="date" name="enrollment_date" class="form-control" placeholder="تاريخ الالتحاق"
+                        value="{{ old('enrollment_date') }}">
+                    @error('enrollment_date') <div class="text-danger">{{ $message }}</div> @enderror
+                </div>
+
+                <div class="col-md-6">
+                    <select name="level" class="form-control" required>
+                        <option value="">اختر المستوى</option>
+                        @foreach(['المستوى الأول', 'المستوى الثاني', 'المستوى الثالث', 'المستوى الرابع', 'المستوى الخامس', 'المستوى السادس'] as $level)
+                            <option value="{{ $level }}" {{ old('level') == $level ? 'selected' : '' }}>{{ $level }}</option>
+                        @endforeach
+                    </select>
+                    @error('level') <div class="text-danger">{{ $message }}</div> @enderror
+                </div>
+
+                <div class="col-md-6">
+                    <input type="password" name="password" id="password" class="form-control" placeholder="كلمة المرور">
+                    @error('password') <div class="text-danger">{{ $message }}</div> @enderror
+                </div>
+
+                <div class="col-md-6">
+                    <input type="password" name="password_confirmation" id="password_confirmation" class="form-control"
+                        placeholder="تأكيد كلمة المرور">
+                </div>
+            </div>
+
+            <div id="password-error" class="text-danger mb-3" style="display:none;">كلمتا المرور غير متطابقتين</div>
+
+            <button type="submit" class="btn btn-success register-btn">تسجيل</button>
+            <div class="mt-3 text-center">
+                <p>هل لديك حساب بالفعل؟ <a href="{{ route('login') }}" class="text-primary">تسجيل الدخول</a></p>
+            </div>
+        </form>
+    </div>
+</body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{{ asset('js/dependent-dropdowns.js') }}"></script>
+<script>
+    const input = document.getElementById('profileImageInput');
+    const preview = document.getElementById('profilePreview');
+
+    input.addEventListener('change', function () {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.innerHTML = `<img src="${e.target.result}" alt="صورة الملف الشخصي" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%;">`;
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
