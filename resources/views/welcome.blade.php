@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منصة دليلي الجامعي</title>
-    {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
+    {{--
+    <script src="https://cdn.tailwindcss.com"></script> --}}
     <script src="{{asset('js/tailwind.js')}}"></script>
     <script>
         tailwind.config = {
@@ -22,7 +24,8 @@
         }
     </script>
     <link href="{{asset('font/cairo.css')}}" rel="stylesheet">
-    {{-- <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet"> --}}
+    {{--
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet"> --}}
     <style>
         body {
             font-family: 'Cairo', sans-serif;
@@ -37,8 +40,7 @@
         <div class="max-w-7xl mx-auto flex items-center justify-between">
             <h1 class="text-2xl font-bold text-primary animate__animated animate__fadeInDown">
                 <span>
-                    <img src="{{asset('images/logo.png')}}" alt="شعار المنصة"
-                        style="width:30px;  display: inline ;">
+                    <img src="{{asset('images/logo.png')}}" alt="شعار المنصة" style="width:30px;  display: inline ;">
                     </a></span>
                 منصة دليلي الجامعي
             </h1>
@@ -58,23 +60,32 @@
                 <nav id="nav-menu" class="hidden md:flex flex-wrap gap-2">
                     <div class="space-x-4 space-x-reverse">
                         @auth
-                            @if (Auth::user()->user_type == 'super_admin')
-                                <a href="{{ url('super-admin/dashboard') }}" class="text-primary font-semibold hover:underline">
+                            @php
+                                $userType = Auth::user()->user_type;
+                            @endphp
+
+                            @if ($userType === 'super_admin')
+                                <a href="{{ route('super_admin.dashboard') }}" class="text-primary font-semibold hover:underline">
                                     لوحة التحكم
                                 </a>
-
-                            @else
-                                <a href="{{ url('/dashboard') }}" class="text-primary font-semibold hover:underline">
+                            @elseif ($userType === 'student')
+                                <a href="{{ route('student.help_requests.index') }}"
+                                    class="text-primary font-semibold hover:underline">
                                     دخول المنصة
                                 </a>
+                            @else
+                                <span class="text-danger font-semibold">نوع مستخدم غير معروف</span>
                             @endif
                         @else
                             <a href="{{ route('login') }}" class="text-primary font-semibold hover:underline">تسجيل الدخول</a>
                             @if (Route::has('register'))
                                 <a href="{{ route('register') }}"
-                                    class="bg-primary text-white px-4 py-2 rounded-md hover:bg-green-800 transition">إنشاء حساب</a>
+                                    class="bg-primary text-white px-4 py-2 rounded-md hover:bg-green-800 transition">
+                                    إنشاء حساب
+                                </a>
                             @endif
                         @endauth
+
                     </div>
                 </nav>
             @endif
