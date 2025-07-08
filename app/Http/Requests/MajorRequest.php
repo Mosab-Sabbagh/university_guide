@@ -14,7 +14,6 @@ class MajorRequest extends FormRequest
     public function authorize(): bool
     {
         return Auth::user()?->user_type === UserRole::SUPER_ADMIN;
-
     }
 
     /**

@@ -19,4 +19,10 @@ class Major extends Model
     {
         return $this->belongsToMany(College::class, 'college_major');
     }
+
+    public function students()
+    {
+        return $this->hasMany(Student::class);
+    }
+
 }
