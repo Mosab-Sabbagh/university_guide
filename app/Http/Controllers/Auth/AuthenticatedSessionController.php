@@ -34,9 +34,9 @@ class AuthenticatedSessionController extends Controller
             case UserRole::SUPER_ADMIN:
                 return redirect()->route('super_admin.dashboard');
             case UserRole::STUDENT:
-                return redirect()->route('dashboard');
+                return redirect()->route('student.help_requests.index');
             default:
-                return redirect()->route('dashboard');
+                return redirect()->route('welcome');
         }
         // return redirect()->intended(route('dashboard', absolute: false));
     }
