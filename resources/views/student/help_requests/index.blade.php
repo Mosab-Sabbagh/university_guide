@@ -13,37 +13,84 @@
 
     <div id="postsContainer">
         @foreach($helpRequests as $helpRequest)
-            <div class="post-card">
-                <div class="post-header">
-                    @if($helpRequest->user && $helpRequest->user->student->profile_image)
-                        <div class="post-avatar">
-                            <img src="{{ asset('storage/' . $helpRequest->user->student->profile_image) }}" alt="صورة المستخدم"
-                                class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+            <div class="post-card" id="post-{{ $helpRequest->id }}">
+                <div class="post-header d-flex justify-content-between align-items-center">
+                    {{-- معلومات المستخدم --}}
+                    <div class="d-flex align-items-center">
+                        {{-- الصورة --}}
+                        @if($helpRequest->user && $helpRequest->user->student->profile_image)
+                            <div class="post-avatar me-2">
+                                <img src="{{ asset('storage/' . $helpRequest->user->student->profile_image) }}" alt="صورة المستخدم"
+                                    class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+                            </div>
+                        @else
+                            <div class="post-avatar me-2">
+                                <i class="fa fa-user text-secondary" style="font-size: 20px;"></i>
+                            </div>
+                        @endif
+
+                        {{-- الاسم والتاريخ --}}
+                        <div>
+                            <div class="post-user fw-bold">{{ $helpRequest->user->name ?? 'مستخدم' }}</div>
+                            @if($helpRequest->created_at)
+                                <div class="post-time text-muted small">{{ $helpRequest->created_at->diffForHumans() }}</div>
+                            @endif
                         </div>
-                    @else
-                        <div class="post-avatar"><i class="fa fa-user"></i></div>
-                    @endif
-                    <div class="post-user">{{ $helpRequest->user->name ?? 'مستخدم' }}</div>
-                    @if($helpRequest->created_at)
-                        <span class="post-time">{{ $helpRequest->created_at->diffForHumans() }}</span>
+                    </div>
+
+                    {{-- النقاط الثلاث (Dropdown) --}}
+                    @if(Auth::id() === $helpRequest->user_id)
+                        <div class="dropdown">
+                            <button class="btn btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-ellipsis-h"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <button class="btn btn-sm btn-primary edit-post-btn" data-id="{{ $helpRequest->id }}"
+                                        data-title="{{ $helpRequest->title }}" data-content="{{ $helpRequest->content }}"
+                                        data-update-url="{{ route('student.help_requests.update', $helpRequest->id) }}">
+                                        تعديل
+                                    </button>
+                                </li>
+                                <li id="post-{{ $helpRequest->id }}">
+                                    <button class="btn btn-sm btn-danger delete-post-btn" data-id="{{ $helpRequest->id }}"
+                                        data-url="{{ route('student.help_requests.destroy', $helpRequest->id) }}">
+                                        حذف
+                                    </button>
+                                </li>
+
+                            </ul>
+                        </div>
                     @endif
                 </div>
-                @if($helpRequest->title)
-                    <span class="post-title blue">{{ $helpRequest->title }}</span>
-                @endif
-                <div style="white-space: pre-line;">{{ $helpRequest->content }}</div>
-                @if($helpRequest->image)
-                    <img src="{{ asset('storage/' . $helpRequest->image) }}" class="post-image" alt="صورة منشور">
-                @endif
+
+                {{-- محتوى المنشور --}}
+                <div>
+                    @if($helpRequest->title)
+                        <span class="post-title blue">{{ $helpRequest->title }}</span>
+                    @endif
+                    <div style="white-space: pre-line;">{{ $helpRequest->content }}</div>
+                    @if($helpRequest->image)
+                        <img src="{{ asset('storage/' . $helpRequest->image) }}" class="post-image" alt="صورة منشور">
+                    @endif
+                </div>
+
                 <div class="post-actions">
-                    {{-- <span><i class="fa fa-comment"></i> {{ $helpRequest->comments->count() }} تعليقات</span> --}}
+                    <span>
+                        <i class="fa fa-comment"></i>
+                        <span class="comment-count" id="comment-count-{{ $helpRequest->id }}">
+                            {{ $helpRequest->comments()->count() }}
+                        </span> تعليقات
+                    </span>
+
                     <span class="add-comment-toggle" onclick="toggleAddComment(this)">
                         <i class="fa fa-plus"></i> إضافة تعليق
                     </span>
                 </div>
+
                 <div class="add-comment-box">
-                    <form action="{{ route('student.comments.store', $helpRequest->id) }}" method="POST"
-                        enctype="multipart/form-data">
+                    <form action="{{ route('student.comments.store', $helpRequest->id) }}" method="POST" class="comment-form"
+                        data-post-id="{{ $helpRequest->id }}" enctype="multipart/form-data">
                         @csrf
                         <input type="text" class="add-comment-input @error('content') is-invalid @enderror" name="content"
                             placeholder="اكتب تعليقك..." required>
@@ -56,33 +103,51 @@
                         </label>
                         <span class="selected-file-name"></span>
                         @error('file') <div class="text-danger small">{{ $message }}</div> @enderror
-
                         <button type="submit" class="add-comment-btn"><i class="fa fa-paper-plane"></i></button>
                     </form>
+                </div>
 
-                </div>
-                <div class="comments-list">
-                    <div class="comment-item">
-                        <div class="comment-avatar"><i class="fa fa-user"></i></div>
-                        <div class="comment-body">
-                            <span class="comment-author">مستحدم</span>
-                            تعليق
+                <div class="comments-list" id="comments-{{ $helpRequest->id }}">
+                    @foreach($helpRequest->comments as $comment)
+                        <div class="comment-item d-flex justify-content-between align-items-start" id="comment-{{ $comment->id }}">
+                            {{-- <div class="comment-avatar"><i class="fa fa-user"></i></div> --}}
+                            <div class="d-flex align-items-start">
+                                <div class="comment-avatar me-2">
+                                    <i class="fa fa-user text-secondary" style="font-size: 20px;"></i>
+                                </div>
+                                <div class="comment-body">
+                                    <span class="comment-author">{{ $comment->user->name }}:</span>
+                                    <span class="comment-content">{{ $comment->content }}</span>
+                                </div>
+                            </div>
+                            @if(Auth::id() === $comment->user_id)
+                                <div class="dropdown">
+                                    <button class="btn btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa fa-ellipsis-v"></i> {{-- النقاط الثلاث --}}
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li>
+                                            <button class="dropdown-item btn-edit" data-id="{{ $comment->id }}"
+                                                data-help-id="{{ $helpRequest->id }}">
+                                                تعديل
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button class="dropdown-item btn-delete text-danger" data-id="{{ $comment->id }}"
+                                                data-help-id="{{ $helpRequest->id }}">
+                                                حذف
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            @endif
                         </div>
-                    </div>
-                    {{-- @foreach($helpRequest->comments as $comment)
-                    <div class="comment-item">
-                        <div class="comment-avatar"><i class="fa fa-user"></i></div>
-                        <div class="comment-body">
-                            <span class="comment-author">{{ $comment->user->name ?? 'مستخدم' }}:</span>
-                            {{ $comment->content }}
-                        </div>
-                    </div>
-                    @endforeach --}}
+                    @endforeach
                 </div>
+
             </div>
         @endforeach
     </div>
-
 
     <div class="modal fade" id="addPostModal" tabindex="-1" aria-labelledby="addPostModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -125,27 +190,10 @@
             </div>
         </div>
     </div>
+
 @endsection
 
 @section('script')
-    <script>
-        // عرض اسم الملف في نموذج إضافة منشور
-        function showPostFileName(input) {
-            const fileNameSpan = document.getElementById('postFileName');
-            if (input.files && input.files[0]) {
-                fileNameSpan.textContent = input.files[0].name;
-            } else {
-                fileNameSpan.textContent = '';
-            }
-        }
-
-
-        function toggleAddComment(btn) {
-            const box = btn.parentElement.nextElementSibling;
-            box.classList.toggle('active');
-            if (box.classList.contains('active')) {
-                box.querySelector('input[type=text]').focus();
-            }
-        }
-    </script>
+    <script src="{{ asset('js/help-comments.js') }}"></script>
+    <script src="{{ asset('js/help-request.js') }}"></script>
 @endsection
