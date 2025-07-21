@@ -21,13 +21,30 @@ Route::middleware(['auth', 'student'])->group(function () {
 Route::middleware(['auth', 'student'])->group(function () {
     Route::get('student/help_requests', [HelpRequestController::class, 'index'])
         ->name('student.help_requests.index');
-    // Route::get('student/help_requests/create', [HelpRequestController::class, 'create'])
-    //     ->name('student.help_requests.create');
+
     Route::post('student/help_requests/store', [HelpRequestController::class, 'store'])
         ->name('student.help_requests.store');
+
+        // تحديث الطلب (PUT)
+Route::put('student/help-requests/{id}', [HelpRequestController::class, 'update'])->name('student.help_requests.update');
+
+// حذف الطلب (DELETE)
+Route::delete('student/help-requests/{id}', [HelpRequestController::class, 'destroy'])->name('student.help_requests.destroy');
+
 });
 
 Route::middleware(['auth', 'student'])->group(function () {
-    Route::post('student/comments/store/{helpRequest}', [HelpRequestCommentController::class, 'store'])
+    Route::post('student/help-requests/{helpRequest}/comments', [HelpRequestCommentController::class, 'store'])
         ->name('student.comments.store');
+
+    Route::patch('student/help-requests/{helpRequest}/comments/{comment}', [HelpRequestCommentController::class, 'update'])->name('student.comments.update');
+    Route::delete('student/help-requests/{helpRequest}/comments/{comment}', [HelpRequestCommentController::class, 'destroy'])->name('student.comments.destroy');
+
 });
+
+
+// Route::prefix('student/help-requests/{helpRequest}/comments')->name('student.comments.')->middleware(['auth', 'student'])->group(function () {
+//     Route::patch('{comment}', [HelpRequestCommentController::class, 'update'])->name('update');
+//     Route::delete('{comment}', [HelpRequestCommentController::class, 'destroy'])->name('destroy');
+// });
+

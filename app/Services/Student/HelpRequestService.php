@@ -11,10 +11,15 @@ class HelpRequestService
     public function getAllHelpRequests()
     {
         return HelpRequest::where('college_id', Auth::user()->student->college_id)
-            ->with(['user', 'college'])
+            ->with([
+                'user',         // صاحب الطلب
+                // 'college',      // الكلية التابعة له
+                'comments.user' // تعليقات الطلب، ومستخدمي كل تعليق
+            ])
             ->orderBy('created_at', 'desc')
             ->get();
     }
+
 
     public function store(array $data)
     {
