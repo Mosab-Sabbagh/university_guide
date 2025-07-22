@@ -52,13 +52,13 @@ class HelpRequestCommentController extends Controller
         ]);
 
         try {
-            $comment->update([
+            $updatedComment = $this->service->updateComment($comment, [
                 'content' => $request->content,
             ]);
 
             return response()->json([
                 'success' => true,
-                'content' => $comment->content,
+                'content' => $updatedComment->content,
             ]);
         } catch (\Exception $e) {
             return response()->json(['error' => 'فشل التحديث'], 500);
@@ -68,7 +68,7 @@ class HelpRequestCommentController extends Controller
     public function destroy($helpRequestId, HelpRequestComment $comment)
     {
         try {
-            $comment->delete();
+            $this->service->deleteComment($comment);
 
             return response()->json(['success' => true]);
         } catch (\Exception $e) {

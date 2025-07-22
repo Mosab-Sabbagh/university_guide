@@ -1,27 +1,30 @@
-<?php 
+<?php
+
 namespace App\Services\Student;
 
 use App\Models\HelpRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class HelpRequestService
 {
 
     public function getAllHelpRequests()
     {
-        return HelpRequest::where('college_id', Auth::user()->student->college_id)
-            ->with([
-                'user',         // صاحب الطلب
-                // 'college',      // الكلية التابعة له
-                'comments.user' // تعليقات الطلب، ومستخدمي كل تعليق
-            ])
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $collegeId = Auth::user()->student->college_id;
+        $cacheKey = "help_requests_college_{$collegeId}";
+
+        return Cache::remember($cacheKey, now()->addMinutes(30), function () use ($collegeId) {
+            return HelpRequest::where('college_id', $collegeId)
+                ->with(['user', 'comments.user'])
+                ->orderBy('created_at', 'desc')
+                ->get();
+        });
     }
 
 
-    public function store(array $data)
+    public function store( $data)
     {
         DB::beginTransaction();
         try {
@@ -38,6 +41,10 @@ class HelpRequestService
             ]);
 
             DB::commit();
+
+            // حذف الكاش بعد الإضافة
+            Cache::forget("help_requests_college_" . $helpRequest->college_id);
+
             return $helpRequest;
         } catch (\Exception $e) {
             DB::rollBack();
@@ -45,5 +52,45 @@ class HelpRequestService
         }
     }
 
-}
+    public function updateHelpRequest( $id,  $data)
+    {
+        $helpRequest = HelpRequest::findOrFail($id);
 
+        DB::beginTransaction();
+        try {
+            $helpRequest->update([
+                'title' => $data['title'],
+                'content' => $data['content'],
+            ]);
+            DB::commit();
+
+            // حذف الكاش بعد التحديث
+            Cache::forget("help_requests_college_" . $helpRequest->college_id);
+
+            return $helpRequest;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
+    public function deleteHelpRequest( $id)
+    {
+        $helpRequest = HelpRequest::findOrFail($id);
+
+        DB::beginTransaction();
+        try {
+            $collegeId = $helpRequest->college_id;
+            $helpRequest->delete();
+            DB::commit();
+
+            // حذف الكاش بعد الحذف
+            Cache::forget("help_requests_college_" . $collegeId);
+
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+}

@@ -24,3 +24,13 @@ require __DIR__.'/student.php';
 Route::get('/student', function () {
     return view('student.teststudent');
 });
+
+// test routes for cache and session for redis
+Route::get('/set-session', function () {
+    session(['key' => 'redis session working']);
+    return 'Session set!';
+});
+
+Route::get('/get-session', function () {
+    return session('key', 'No session found');
+});
