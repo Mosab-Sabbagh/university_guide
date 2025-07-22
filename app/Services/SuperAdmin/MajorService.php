@@ -77,7 +77,7 @@ class MajorService
             DB::commit();
 
             // حذف الكاش المرتبط
-            Cache::forget("major_{$major->id}");
+            Cache::forget("major_{$major->getKey()}");
             Cache::forget('majors_all');
             Cache::forget('majors_paginated');
 
@@ -93,7 +93,7 @@ class MajorService
         try {
             DB::beginTransaction();
 
-            $id = $major->id;
+            $id = $major->getKey();
             $result = $major->delete();
 
             DB::commit();
