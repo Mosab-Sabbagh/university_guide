@@ -7,8 +7,13 @@ use Illuminate\Support\Facades\Cache;
 
 class UniversityService
 {
-    public function getAllUniversities($search = null)
-    {
+
+public function getAllUniversities($search = null)
+{
+    // توليد مفتاح كاش مميز حسب قيمة البحث والصفحة الحالية
+    $cacheKey = 'universities_' . md5(request()->fullUrl());
+
+    return Cache::remember($cacheKey, now()->addMinutes(30), function () use ($search) {
         $query = University::query();
 
         if ($search) {
@@ -16,7 +21,8 @@ class UniversityService
         }
 
         return $query->paginate(10)->withQueryString();
-    }
+    });
+}
 
     public function getAllUniversitiesWithoutPagination()
     {
@@ -60,10 +66,11 @@ class UniversityService
 
             DB::commit();
 
-            // حذف الكاش المرتبط بعد التحديث
-            Cache::forget("university_{$university->id}");
-            Cache::forget("university_details_{$university->id}");
-            Cache::forget("university_{$university->id}_colleges");
+            // حذف الكاش المرتبط بعد التحديث 
+            // $university->id = $university->getKey(); // Ensure the ID is set correctly
+            Cache::forget("university_{$university->getKey()}");
+            Cache::forget("university_details_{$university->getKey()}");
+            Cache::forget("university_{$university->getKey()}_colleges");
             Cache::forget('universities_all');
 
             return $result;
@@ -78,7 +85,7 @@ class UniversityService
         try {
             DB::beginTransaction();
 
-            $id = $university->id;
+            $id = $university->getKey();
             $result = $university->delete();
 
             DB::commit();

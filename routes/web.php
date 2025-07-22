@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -33,4 +34,12 @@ Route::get('/set-session', function () {
 
 Route::get('/get-session', function () {
     return session('key', 'No session found');
+});
+
+Route::get('/test-cache', function () {
+    $value = Cache::remember('check_redis', 120, function () {
+        return 'Redis is working!';
+    });
+
+    return "Cache value: " . $value;
 });
