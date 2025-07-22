@@ -11,8 +11,10 @@ services:
       - DB_DATABASE=university_guide
       - DB_USERNAME=root
       - DB_PASSWORD=secret
+      - REDIS_HOST=redis  # إضافة متغير بيئة لـ Redis
     depends_on:
       - mysql
+      - redis  # إضافة اعتماد على خدمة Redis
     networks:
       - laravel-network
 
@@ -34,14 +36,26 @@ services:
       MYSQL_DATABASE: university_guide
       MYSQL_ROOT_PASSWORD: secret
     ports:
-      - "3306:3306"   # <-- هذا السطر أضفناه الآن
+      - "3306:3306"
     volumes:
       - mysql-data:/var/lib/mysql
     networks:
       - laravel-network
 
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - laravel-network
+
 volumes:
   mysql-data:
+    driver: local
+  redis_data:
     driver: local
 
 networks:

@@ -41,34 +41,44 @@ class HelpRequestController extends Controller
 
     public function update(Request $request, $id)
     {
-        $helpRequest = HelpRequest::findOrFail($id);
-
         $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
         ]);
 
-        $helpRequest->update([
-            'title' => $request->title,
-            'content' => $request->content,
-        ]);
+        try {
+            $this->helpRequestService->updateHelpRequest($id, $request->only(['title', 'content']));
 
-        if ($request->ajax()) {
-            return response()->json(['status' => 'success', 'message' => 'تم التعديل بنجاح']);
+            if ($request->ajax()) {
+                return response()->json(['status' => 'success', 'message' => 'تم التعديل بنجاح']);
+            }
+
+            return redirect()->back()->with('success', 'تم التعديل بنجاح');
+        } catch (\Exception $e) {
+            if ($request->ajax()) {
+                return response()->json(['error' => 'فشل التعديل'], 500);
+            }
+
+            return redirect()->back()->with('error', 'حدث خطأ أثناء التعديل');
         }
-
-        return redirect()->back()->with('success', 'تم التعديل بنجاح');
     }
 
     public function destroy(Request $request, $id)
     {
-        $helpRequest = HelpRequest::findOrFail($id);
-        $helpRequest->delete();
+        try {
+            $this->helpRequestService->deleteHelpRequest($id);
 
-        if ($request->ajax() || $request->wantsJson()) {
-            return response()->json(['status' => 'success', 'message' => 'تم الحذف بنجاح']);
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['status' => 'success', 'message' => 'تم الحذف بنجاح']);
+            }
+
+            return redirect()->back()->with('success', 'تم الحذف بنجاح');
+        } catch (\Exception $e) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['error' => 'فشل الحذف'], 500);
+            }
+
+            return redirect()->back()->with('error', 'حدث خطأ أثناء الحذف');
         }
-
-        return redirect()->back()->with('success', 'تم الحذف بنجاح');
     }
 }

@@ -1,23 +1,33 @@
-<?php 
+<?php
+
 namespace App\Services\SuperAdmin;
+
 use App\Models\College;
 use App\Models\University;
 use App\Models\Major;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
-class MajorService{
+class MajorService
+{
     public function getAllMajorsWithoutPagination()
     {
-        return Major::get();
+        return Cache::remember('majors_all', now()->addHour(), function () {
+            return Major::get();
+        });
     }
 
     public function getAllMajors($search = null)
     {
-        $query = Major::query();  
-
-        if ($search) {
-            $query->where('name_ar', 'like', '%' . $search . '%');
+        if (!$search) {
+            return Cache::remember('majors_paginated', now()->addHour(), function () {
+                return Major::paginate(10)->withQueryString();
+            });
         }
+
+        $query = Major::query();
+
+        $query->where('name_ar', 'like', '%' . $search . '%');
 
         return $query->paginate(10)->withQueryString();
     }
@@ -26,6 +36,7 @@ class MajorService{
     {
         try {
             DB::beginTransaction();
+
             $major = Major::create($data);
 
             if (isset($data['colleges'])) {
@@ -33,6 +44,11 @@ class MajorService{
             }
 
             DB::commit();
+
+            // حذف الكاش
+            Cache::forget('majors_all');
+            Cache::forget('majors_paginated');
+
             return $major;
         } catch (\Exception $e) {
             DB::rollBack();
@@ -42,13 +58,16 @@ class MajorService{
 
     public function getMajorById($id)
     {
-        return Major::findOrFail($id);
+        return Cache::remember("major_{$id}", now()->addHour(), function () use ($id) {
+            return Major::findOrFail($id);
+        });
     }
 
     public function updateMajor(Major $major, array $data)
     {
         try {
             DB::beginTransaction();
+
             $result = $major->update($data);
 
             if (isset($data['colleges'])) {
@@ -56,6 +75,12 @@ class MajorService{
             }
 
             DB::commit();
+
+            // حذف الكاش المرتبط
+            Cache::forget("major_{$major->id}");
+            Cache::forget('majors_all');
+            Cache::forget('majors_paginated');
+
             return $result;
         } catch (\Exception $e) {
             DB::rollBack();
@@ -67,8 +92,17 @@ class MajorService{
     {
         try {
             DB::beginTransaction();
+
+            $id = $major->id;
             $result = $major->delete();
+
             DB::commit();
+
+            // حذف الكاش المرتبط
+            Cache::forget("major_{$id}");
+            Cache::forget('majors_all');
+            Cache::forget('majors_paginated');
+
             return $result;
         } catch (\Exception $e) {
             DB::rollBack();
