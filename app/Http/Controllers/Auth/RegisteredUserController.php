@@ -54,6 +54,7 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'user_type' => UserRole::STUDENT, // Added user_type field
+            'is_admin' => false, 
         ]);
 
         // Create a new student record

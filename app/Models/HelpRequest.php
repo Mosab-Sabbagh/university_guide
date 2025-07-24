@@ -9,6 +9,7 @@ class HelpRequest extends Model
         protected $fillable = [
         'user_id',
         'college_id',
+        'university_id',
         'title',
         'content',
         'image',

@@ -20,13 +20,12 @@
 </html>
 
 <body>
-    @include('student.layouts.nav')
+    @include('student.admin.layouts.nav')
 <div class="dashboard-container">
-    @include('student.layouts.rightSide')
+    @include('student.admin.layouts.side')
     <div class=" main-content flex-grow-1">
         @yield('content')
     </div>
-    @include('student.layouts.leftSide')
 </div>
     {{-- <script src="/js/jquery-3.7.1.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
