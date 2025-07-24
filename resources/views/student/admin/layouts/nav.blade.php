@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top"
     style="border-bottom:1px solid #e0e0e0; z-index:100;">
     <div class="container-fluid d-flex justify-content-between align-items-center">
-        <div class="d-flex justify-content-between align-items-center">
+        <div>
             <h4 class="text-success">منصة دليلي الجامعي</h6>
         </div>
 

@@ -20,7 +20,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'user_type'
+        'user_type',
+        'is_admin'
     ];
 
     /**
@@ -60,5 +61,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(HelpRequestComment::class);
     }
+    
+    public function summaries()
+    {
+        return $this->hasMany(Summary::class);
+    }
+    
 
 }
