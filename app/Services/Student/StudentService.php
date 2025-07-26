@@ -1,6 +1,7 @@
 <?php 
 namespace App\Services\Student;
 use App\Models\Student;
+use App\Services\Admin\AdminDashbordService;
 use Illuminate\Support\Facades\DB;
 class StudentService{
     public function store($request, $user_id)
@@ -24,6 +25,7 @@ class StudentService{
             ]);
 
             DB::commit();
+            AdminDashbordService::clearDashboardCache($student->college_id, $student->university_id);
             return $student;
         } catch (\Exception $e) {
             DB::rollBack();

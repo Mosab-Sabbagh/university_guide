@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Student\CourseGuideController;
 use App\Http\Controllers\Student\HelpRequestCommentController;
 use App\Http\Controllers\Student\HelpRequestController;
 use App\Http\Controllers\Student\ProfileStudentController;
@@ -49,4 +50,8 @@ Route::prefix('student/summary')->middleware(['auth', 'student'])->group(functio
     Route::post('summary',[SummaryController::class,'store'])->name('student.summary.store');
     Route::get('/{id}/download', [SummaryController::class, 'download'])->name('summaries.download');
 
+});
+
+Route::prefix('student/course_guide')->middleware(['auth', 'student'])->group(function () {
+    Route::get('coursees_guide',[CourseGuideController::class,'index'])->name('student.course_guide.index');
 });

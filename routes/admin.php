@@ -2,12 +2,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\SummaryAdminController;
+use App\Http\Controllers\Admin\AdminDashbordController;
 
-// بدها تغيير 
-Route::get('/admin', function () {
-    return view('student.admin.index');
-})->name('admin');
-
+Route::get('/admin', [AdminDashbordController::class, 'index'])->middleware(['auth', 'admin'])->name('admin.dashboard');
 
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/courses', [CourseController::class, 'index'])->name('admin.courses.index');
