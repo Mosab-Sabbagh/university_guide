@@ -36,5 +36,10 @@ class College extends Model
         return $this->hasMany(HelpRequest::class);
     }
 
+    public function summaries()
+    {
+        return $this->hasMany(Summary::class);
+    }
+
 
 }

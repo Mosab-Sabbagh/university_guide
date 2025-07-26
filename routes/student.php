@@ -3,6 +3,7 @@
 use App\Http\Controllers\Student\HelpRequestCommentController;
 use App\Http\Controllers\Student\HelpRequestController;
 use App\Http\Controllers\Student\ProfileStudentController;
+use App\Http\Controllers\Student\SummaryController;
 use App\Models\HelpRequest;
 use Illuminate\Support\Facades\Route;
 
@@ -43,8 +44,9 @@ Route::middleware(['auth', 'student'])->group(function () {
 });
 
 
-// Route::prefix('student/help-requests/{helpRequest}/comments')->name('student.comments.')->middleware(['auth', 'student'])->group(function () {
-//     Route::patch('{comment}', [HelpRequestCommentController::class, 'update'])->name('update');
-//     Route::delete('{comment}', [HelpRequestCommentController::class, 'destroy'])->name('destroy');
-// });
+Route::prefix('student/summary')->middleware(['auth', 'student'])->group(function () {
+    Route::get('summaries',[SummaryController::class,'index'])->name('student.summaries.index');
+    Route::post('summary',[SummaryController::class,'store'])->name('student.summary.store');
+    Route::get('/{id}/download', [SummaryController::class, 'download'])->name('summaries.download');
 
+});

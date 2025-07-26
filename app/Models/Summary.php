@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Summary extends Model
 {
-    protected $fillable = ['user_id', 'course_id', 'title', 'file_path', 'file_type', 'description'];
+    protected $fillable = ['user_id', 'university_id', 'college_id', 'course_id', 'title', 'description', 'file_path'];
 
     public function user()
     {
@@ -17,5 +17,14 @@ class Summary extends Model
     {
         return $this->belongsTo(Course::class);
     }
-}
 
+    public function university()
+    {
+        return $this->belongsTo(University::class);
+    }
+
+    public function college()
+    {
+        return $this->belongsTo(College::class);
+    }
+}

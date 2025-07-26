@@ -25,10 +25,14 @@ class University extends Model
     {
         return $this->belongsToMany(College::class, 'university_college');
     }
-    
+
     public function students()
     {
         return $this->hasMany(Student::class);
     }
 
+    public function summaries()
+    {
+        return $this->hasMany(Summary::class);
+    }
 }
