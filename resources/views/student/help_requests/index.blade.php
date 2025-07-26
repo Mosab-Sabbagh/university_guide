@@ -1,7 +1,7 @@
 @extends('student.layouts.app')
 @section('title', 'المساعدة الأكاديمية')
 @section('content')
-    <div class="d-flex align-items-center justify-content-between mb-4">
+    <div class="d-flex align-items-center justify-content-between mb-4 section-title">
         <div class="dashboard-header mb-0">ركن المساعدة الأكاديمية</div>
         <button class="btn btn-success d-flex align-items-center gap-2"
             style="border-radius: 8px; font-weight:500; font-size:1rem;" data-bs-toggle="modal"

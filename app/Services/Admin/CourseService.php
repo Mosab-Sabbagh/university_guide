@@ -10,6 +10,7 @@ class CourseService
 {
     public function storeCourse($data)
     {
+        $user = Auth::user()->student;
         Course::create([
             'name_ar' => $data['name_ar'],
             'name_en' => $data['name_en'],
@@ -19,6 +20,8 @@ class CourseService
             'college_id' => Auth::user()->student->college_id, // Assuming the authenticated user is a student and has a university
             'major_id' => Auth::user()->student->major_id,
         ]);
+        $cacheKey = "courses_college_{$user->college_id}_university_{$user->university_id}";
+        Cache::forget($cacheKey);
     }
 
     public function getCourses()
