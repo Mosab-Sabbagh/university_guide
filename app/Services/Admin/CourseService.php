@@ -22,6 +22,8 @@ class CourseService
         ]);
         $cacheKey = "courses_college_{$user->college_id}_university_{$user->university_id}";
         Cache::forget($cacheKey);
+        AdminDashbordService::clearDashboardCache(Auth::user()->student->college_id, Auth::user()->student->university_id);
+
     }
 
     public function getCourses()

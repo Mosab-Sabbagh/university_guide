@@ -3,6 +3,7 @@
 namespace App\Services\Student;
 
 use App\Models\Summary;
+use App\Services\Admin\AdminDashbordService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
@@ -35,6 +36,9 @@ class SummaryService
         ]);
         // Clear the cache after storing a new summary
         $this->clearSummaryCache();
+
+        AdminDashbordService::clearDashboardCache(Auth::user()->student->college_id, Auth::user()->student->university_id);
+        
         return $summary;
     }
 
