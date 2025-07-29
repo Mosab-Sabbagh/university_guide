@@ -20,5 +20,9 @@ class Course extends Model
     {
         return $this->hasMany(Summary::class);
     }
-}
 
+    public function books()
+    {
+        return $this->hasMany(Book::class);
+    }
+}

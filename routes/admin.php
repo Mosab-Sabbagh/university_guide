@@ -3,6 +3,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\SummaryAdminController;
 use App\Http\Controllers\Admin\AdminDashbordController;
+use App\Http\Controllers\Admin\EBookController;
 
 Route::get('/admin', [AdminDashbordController::class, 'index'])->middleware(['auth', 'admin'])->name('admin.dashboard');
 
@@ -18,4 +19,10 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/summaries', [SummaryAdminController::class, 'index'])->name('admin.summaries.index');
     Route::delete('/summary/{id}' , [SummaryAdminController::class,'destroy'])->name('admin.summary.delete');
+});
+
+Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
+    Route::get('/books', [EBookController::class, 'index'])->name('admin.books.index');
+    Route::post('/book', [EBookController::class, 'store'])->name('admin.book.store');
+    Route::delete('/book/{id}', [EBookController::class, 'destroy'])->name('admin.book.delete');
 });
