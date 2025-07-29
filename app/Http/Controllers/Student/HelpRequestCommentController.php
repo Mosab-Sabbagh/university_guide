@@ -53,8 +53,9 @@ class HelpRequestCommentController extends Controller
 
         try {
             $updatedComment = $this->service->updateComment($comment, [
-                'content' => $request->content,
+                'content' => $request->input('content'),
             ]);
+
 
             return response()->json([
                 'success' => true,

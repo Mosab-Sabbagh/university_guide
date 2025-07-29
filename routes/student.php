@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Student\BookController;
 use App\Http\Controllers\Student\CourseGuideController;
 use App\Http\Controllers\Student\HelpRequestCommentController;
 use App\Http\Controllers\Student\HelpRequestController;
@@ -54,4 +55,9 @@ Route::prefix('student/summary')->middleware(['auth', 'student'])->group(functio
 
 Route::prefix('student/course_guide')->middleware(['auth', 'student'])->group(function () {
     Route::get('coursees_guide',[CourseGuideController::class,'index'])->name('student.course_guide.index');
+});
+
+Route::prefix('student/ebooks')->middleware(['auth', 'student'])->group(function () {
+    Route::get('',[BookController::class,'index'])->name('student.books.index');
+    Route::get('/{id}/download', [BookController::class, 'download'])->name('book.download');
 });
