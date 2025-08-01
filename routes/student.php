@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Student\BookController;
+use App\Http\Controllers\Student\BookPostController;
+use App\Http\Controllers\Student\BookRequestController;
 use App\Http\Controllers\Student\CourseGuideController;
 use App\Http\Controllers\Student\HelpRequestCommentController;
 use App\Http\Controllers\Student\HelpRequestController;
@@ -60,4 +62,18 @@ Route::prefix('student/course_guide')->middleware(['auth', 'student'])->group(fu
 Route::prefix('student/ebooks')->middleware(['auth', 'student'])->group(function () {
     Route::get('',[BookController::class,'index'])->name('student.books.index');
     Route::get('/{id}/download', [BookController::class, 'download'])->name('book.download');
+});
+
+Route::prefix('student/books-posts')->middleware(['auth', 'student'])->group(function () {
+    Route::get('',[BookPostController::class,'index'])->name('student.bookPosts.index');
+    Route::post('/store',[BookPostController::class,'store'])->name('student.book_post.store');
+    Route::get('/show/{id}',[BookPostController::class,'show'])->name('student.book_post.show');
+    Route::get('/posts/{user_id}', [BookPostController::class, 'getBookPostById'])->name('student.bookPosts.postsByUserId');
+});
+
+Route::prefix('student/book-request')->middleware(['auth', 'student'])->group(function () {
+    Route::post('store',[BookRequestController::class,'store'])->name('student.bookRequests.store');
+    Route::get('showRequests/{post_id}',[BookRequestController::class,'showReqestsForPost'])->name('student.bookRequests.showReqestsForPost');
+    Route::post('accept/', [BookRequestController::class, 'acceptRequest'])->name('student.bookRequests.accept');
+    Route::get('myRequests/{user_id}', [BookRequestController::class, 'myRequests'])->name('student.bookRequests.myRequests');
 });

@@ -12,9 +12,14 @@ class BookController extends Controller
 {
     public function index(EBookService $eBookService)
     {
-        $search = request('search');
-        $books = $eBookService->getBooks($search);
-        return view('student.books.index', compact('books'));
+        try {
+            $search = request('search');
+            $books = $eBookService->getBooks($search);
+            return view('student.books.index', compact('books'));
+        } catch (Exception $e) {
+            Log::error($e);
+            return redirect()->route('student.books.index')->with('error', 'حدث خطأ أثناء تحميل الكتب');
+        }
     }
 
 
