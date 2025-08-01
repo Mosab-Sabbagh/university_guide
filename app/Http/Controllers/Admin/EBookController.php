@@ -20,10 +20,15 @@ class EBookController extends Controller
 
     public function index(CourseService $courseService)
     {
-        $search = request('search');
-        $courses = $courseService->getCourses();
-        $books = $this->eBookService->getBooks($search);
-        return view('student.admin.books.index', compact('courses','books'));
+        try {
+            $search = request('search');
+            $courses = $courseService->getCourses();
+            $books = $this->eBookService->getBooks($search);
+            return view('student.admin.books.index', compact('courses', 'books'));
+        } catch (Exception $e) {
+            Log::error($e);
+            return redirect()->route('admin.books.index')->with('error', 'حدث خطأ أثناء تحميل الكتب');
+        }
     }
 
     public function store(BookRequest $request)
