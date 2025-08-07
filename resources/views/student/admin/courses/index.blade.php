@@ -2,14 +2,30 @@
 @section('title', 'المساقات ')
 @section('content')
 
+    <div class="d-flex align-items-center justify-content-between mb-4 section-title">
+        <div class="dashboard-header mb-0"> المساقات </div>
+        <button class="btn btn-success" id="toggleFormBtn">
+            <i class="fas fa-plus"></i> إضافة مساق جديد
+        </button>
+    </div>
+
     <div class="container mt-4">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div class="card shadow-sm">
+                <div class="card shadow-sm d-none" id="bookFormCard">
                     <div class="card-header  text-black">
                         <h5 class="mb-0">إضافة مساق جديد</h5>
                     </div>
                     <div class="card-body">
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <form action="{{route('admin.courses.store')}}" method="post">
                             @csrf
                             <div class="row mb-3">
@@ -68,18 +84,20 @@
                                             <td>{{$course->name_ar}}</td>
                                             <td>{{$course->name_en}}</td>
                                             <td>{{$course->code}}</td>
-                                        <td>
-                                            <a href="{{route('admin.courses.edit',$course->id)}}" class="btn btn-sm btn-warning">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            <form action="{{route('admin.course.delete',$course->id)}}" method="post" class="d-inline delete-form" style="display: inline-block;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger" >
-                                                    <i class="fas fa-trash"></i>
-                                                </button>   
-                                            </form>
-                                        </td>
+                                            <td>
+                                                <a href="{{route('admin.courses.edit', $course->id)}}"
+                                                    class="btn btn-sm btn-warning">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <form action="{{route('admin.course.delete', $course->id)}}" method="post"
+                                                    class="d-inline delete-form" style="display: inline-block;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
                                         </tr>
                                     @empty
                                         <tr>
@@ -94,4 +112,13 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('script')
+    <script>
+        document.getElementById('toggleFormBtn').addEventListener('click', function () {
+            const formCard = document.getElementById('bookFormCard');
+            formCard.classList.toggle('d-none');
+        });
+    </script>
 @endsection

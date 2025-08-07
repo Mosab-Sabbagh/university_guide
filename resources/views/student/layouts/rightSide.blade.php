@@ -3,14 +3,14 @@
     <div class="nav flex-column sticky">
         @if (Auth::user()->user_type == 'student' && Auth::user()->is_admin)
             <a class="nav-link" href="{{ route('admin.dashboard') }}" style="display: inline-block;
-                                            padding: 10px 20px;
-                                            background: linear-gradient(to right, #28a745, #a8e063);
-                                            color: white;
-                                            font-weight: bold;
-                                            border: none;
-                                            border-radius: 8px;
-                                            text-decoration: none;
-                                            margin-bottom: 10px;">
+                                                padding: 10px 20px;
+                                                background: linear-gradient(to right, #28a745, #a8e063);
+                                                color: white;
+                                                font-weight: bold;
+                                                border: none;
+                                                border-radius: 8px;
+                                                text-decoration: none;
+                                                margin-bottom: 10px;">
                 <i class="fas fa-tachometer-alt"></i> <span> لوحة التحكم </span>
             </a>
         @endif
@@ -60,6 +60,8 @@
             </ul>
         </div>
 
-        <a class="nav-link" href="#"><i class="fas fa-chalkboard-teacher"></i> <span>المدرسين</span></a>
+        <a href="{{route('student.teachers.index')}}"
+            class="nav-link {{ request()->routeIs('student.teachers.*') ? 'active' : '' }}">
+            <i class="fas fa-chalkboard-teacher"></i> <span>المدرسين</span></a>
     </div>
 </div>
