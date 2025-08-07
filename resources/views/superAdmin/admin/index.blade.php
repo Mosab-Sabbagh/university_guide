@@ -30,13 +30,13 @@
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->user_type }}</td>
                             <td>
-                            @if($user->user_type === 'admin')
+                            @if($user->is_admin == true)
                                 <form method="POST" action="{{ route('super_admin.admin.revoke', $user->id) }}" id="revoke-form-{{ $user->id }}">
                                     @csrf
                                     @method('PATCH')
                                     <button type="button" class="btn btn-danger btn-sm revoke-btn" data-id="{{ $user->id }}">إلغاء الصلاحية</button>
                                 </form>
-                            @elseif($user->user_type === 'student')
+                            @elseif($user->is_admin == false )
                                 <form method="POST" action="{{ route('super_admin.admin.promote', $user->id) }}" id="promote-form-{{ $user->id }}">
                                     @csrf
                                     @method('PATCH')

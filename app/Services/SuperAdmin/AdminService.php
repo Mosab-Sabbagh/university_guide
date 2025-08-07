@@ -18,7 +18,7 @@ class AdminService
             $cacheKey = "admins_page_{$page}_perpage_{$perPage}";
 
             return Cache::remember($cacheKey, now()->addMinutes(30), function () use ($perPage) {
-                return User::where('user_type', 'admin')->paginate($perPage);
+                return User::where('is_admin', true)->paginate($perPage);
             });
         }
 
@@ -41,7 +41,9 @@ class AdminService
 
         DB::beginTransaction();
         try {
-            $user->user_type = UserRole::ADMIN;
+            // $user->user_type = UserRole::ADMIN;
+            $user->is_admin = true;
+
             $user->save();
 
             DB::commit();
@@ -56,13 +58,16 @@ class AdminService
 
     public function revokeAdmin(User $user): void
     {
-        if ($user->user_type !== 'admin') {
+        if ($user->is_admin == false) {
             throw new \DomainException('This user is not an admin.');
         }
 
         DB::beginTransaction();
         try {
-            $user->update(['user_type' => 'student']);
+            $user->update([
+                // 'user_type' => 'student',
+                'is_admin' => false,
+            ]);
             DB::commit();
 
             // حذف كل الكاش المرتبط بالمدراء بعد التعديل
