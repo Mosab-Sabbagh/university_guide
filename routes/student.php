@@ -77,3 +77,8 @@ Route::prefix('student/book-request')->middleware(['auth', 'student'])->group(fu
     Route::post('accept/', [BookRequestController::class, 'acceptRequest'])->name('student.bookRequests.accept');
     Route::get('myRequests/{user_id}', [BookRequestController::class, 'myRequests'])->name('student.bookRequests.myRequests');
 });
+
+Route::prefix('student/teachers')->middleware(['auth', 'student'])->group(function () {
+    Route::get('', [\App\Http\Controllers\Student\TeacherController::class, 'index'])->name('student.teachers.index');
+    Route::get('/{id}', [\App\Http\Controllers\Student\TeacherController::class, 'show'])->name('student.teachers.show');
+});

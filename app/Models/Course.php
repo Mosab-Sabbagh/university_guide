@@ -25,4 +25,11 @@ class Course extends Model
     {
         return $this->hasMany(Book::class);
     }
+
+
+    public function teachers()
+    {
+        return $this->belongsToMany(Teacher::class, 'teacher_course');
+    }
+
 }
