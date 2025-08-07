@@ -156,7 +156,7 @@ class StudentSeeder extends Seeder
             $user = User::create([
                 'name' => $data['name'],
                 'email' => $data['email'],
-                'password' => Hash::make('123456789'), 
+                'password' => Hash::make('123456789'),
                 'user_type' => 'student',
                 'is_admin' => 0,
             ]);
@@ -167,9 +167,44 @@ class StudentSeeder extends Seeder
                 'university_id' => $data['university_id'],
                 'college_id' => $data['college_id'],
                 'major_id' => $data['major_id'],
-                'enrollment_date' => now()->subYears($data['level'] - 1), 
+                'enrollment_date' => now()->subYears($data['level'] - 1),
                 'level' => $data['level'],
             ]);
+
+
+            Student::create([
+                'user_id' => $user->id,
+                'student_number' => $data['student_number'],
+                'university_id' => $data['university_id'],
+                'college_id' => $data['college_id'],
+                'major_id' => $data['major_id'],
+                'enrollment_date' => now()->subYears($data['level'] - 1),
+                'level' => $data['level'],
+            ]);
+
+            $admin1 =User::where('email', 'admin1@universityguide.ps')->first();
+            $admin2 =User::where('email', 'admin2@universityguide.ps')->first();
+
+            Student::create([
+                'user_id' => $admin1->id,
+                'student_number' => '20231016',
+                'university_id' => 1, // الجامعة الإسلامية
+                'college_id' => 1, // كلية الهندسة
+                'major_id' => 4, // هندسة الحاسوب
+                'enrollment_date' => now()->subYears($data['level'] - 1),
+                'level' => 3,
+            ]);
+
+            Student::create([
+                'user_id' => $admin2->id,
+                'student_number' => '20271006',
+                'university_id' => 8, // جامعة الأزهر, 
+                'college_id' => 10, // كلية الشريعة, 
+                'major_id' => 1, // الشريعة الإسلامية, 
+                'enrollment_date' => now()->subYears($data['level'] - 1),
+                'level' => 4,
+            ]);
+
         }
     }
 }

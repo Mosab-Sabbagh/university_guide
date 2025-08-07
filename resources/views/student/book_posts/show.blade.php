@@ -33,7 +33,7 @@
                                     <div class="d-flex align-items-center mb-2">
                                         <i class="fas fa-calendar-alt me-2 text-secondary"></i>
                                         <span class="fw-bold">تاريخ النشر:</span>
-                                        <span>{{ $bookPost->created_at->format('Y-m-d') }}</span>
+                                        <span>{{$bookPost->created_at ? $bookPost->created_at->format('Y-m-d') : 'غير محدد' }}</span>
                                     </div>
                                     @if(!$bookPost->is_free)
                                         <div class="d-flex align-items-center mb-2">

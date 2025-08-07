@@ -45,7 +45,7 @@
                                 <div class="col-md-6 text-md-end">
                                     <p class="mb-1 text-muted">
                                         <i class="far fa-clock"></i>
-                                        تم الإرسال في: {{ $bookRequest->created_at->format('Y-m-d H:i') }}
+                                        تم الإرسال في: {{ $bookRequest->created_at ? $bookRequest->created_at->format('Y-m-d H:i') : 'غير محدد' }}
                                     </p>
                                 </div>
                             </div>

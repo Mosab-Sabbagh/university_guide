@@ -34,7 +34,7 @@
         <!-- Dropdown Menu معدل -->
         <div class="nav-item dropdown">
             <a href=""
-                class="nav-link dropdown-toggle {{ request()->routeIs('student.bookPosts.*') || request()->routeIs('student.bookRequests.*') ? 'active' : '' }}"
+                class="nav-link dropdown-toggle {{ request()->routeIs('student.bookPosts.*') || request()->routeIs('student.book_post.show') || request()->routeIs('student.bookRequests.*') ? 'active' : '' }}"
                 data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fas fa-book"></i> <span> سوق الكتب </span>
             </a>
