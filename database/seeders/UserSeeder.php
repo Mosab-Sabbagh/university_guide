@@ -16,26 +16,31 @@ class UserSeeder extends Seeder
     {
         // Super Admin
         User::create([
-            'name' => 'Super Admin',
-            'email' => 'superadmin@example.com',
+            'name' => 'أحمد محمد أبو عودة',
+            'email' => 'superadmin@universityguide.ps',
             'password' => Hash::make('123456789'), 
             'user_type' => 'super_admin',
+            'is_admin' => 0,
         ]);
 
-        // Admin
+        // Admin Users (طلبة مع صلاحيات إدارية)
         User::create([
-            'name' => 'University Admin',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('123456789'), 
-            'user_type' => 'admin',
-        ]);
-
-        // Student
-        User::create([
-            'name' => 'Student User',
-            'email' => 'student@example.com',
+            'name' => 'فاطمة علي حسن',
+            'email' => 'admin1@universityguide.ps',
             'password' => Hash::make('123456789'), 
             'user_type' => 'student',
+            'is_admin' => 1,
         ]);
+
+        User::create([
+            'name' => 'محمد خالد الزعبي',
+            'email' => 'admin2@universityguide.ps',
+            'password' => Hash::make('123456789'), 
+            'user_type' => 'student',
+            'is_admin' => 1,
+        ]);
+
+        // تم إزالة الطلاب العاديين من هنا، لأنهم يتم إنشاؤهم في StudentSeeder
+        // This section has been removed to avoid duplicate entries.
     }
 }
