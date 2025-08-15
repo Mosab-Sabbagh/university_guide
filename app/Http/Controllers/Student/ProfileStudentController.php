@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Services\Student\HelpRequestService;
 use App\Services\Student\ProfileStudentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,10 +17,11 @@ class ProfileStudentController extends Controller
         $this->profileService = $profileService;
     }
 
-    public function show()
+    public function show(HelpRequestService $helpRequestService)
     {
         $student = Auth::user();
-        return view('student.profile.show', compact('student'));
+        $helpRequests = $helpRequestService->getHelpRequestByUserId(Auth::id());
+        return view('student.profile.show', compact('student','helpRequests'));
     }
 
     public function edit()

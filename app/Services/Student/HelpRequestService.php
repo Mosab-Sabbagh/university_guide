@@ -10,24 +10,24 @@ use Illuminate\Support\Facades\Cache;
 class HelpRequestService
 {
 
-public function getAllHelpRequests()
-{
-    $collegeId = Auth::user()->student->college_id;
-    $universityId = Auth::user()->student->university_id; // الحصول على university_id
-    $cacheKey = "help_requests_college_{$collegeId}_university_{$universityId}"; // تعديل المفتاح ليشمل الجامعة
+    public function getAllHelpRequests()
+    {
+        $collegeId = Auth::user()->student->college_id;
+        $universityId = Auth::user()->student->university_id; // الحصول على university_id
+        $cacheKey = "help_requests_college_{$collegeId}_university_{$universityId}"; // تعديل المفتاح ليشمل الجامعة
 
-    return Cache::remember($cacheKey, now()->addMinutes(30), function () use ($collegeId, $universityId) {
-        return HelpRequest::where('college_id', $collegeId)
-            ->where('university_id', $universityId) // إضافة شرط الجامعة
-            ->with(['user', 'comments.user'])
-            ->orderBy('created_at', 'desc')
-            ->get();
-    });
-}
+        return Cache::remember($cacheKey, now()->addMinutes(30), function () use ($collegeId, $universityId) {
+            return HelpRequest::where('college_id', $collegeId)
+                ->where('university_id', $universityId) // إضافة شرط الجامعة
+                ->with(['user', 'comments.user'])
+                ->orderBy('created_at', 'desc')
+                ->get();
+        });
+    }
 
 
 
-    public function store( $data)
+    public function store($data)
     {
         DB::beginTransaction();
         try {
@@ -56,7 +56,7 @@ public function getAllHelpRequests()
         }
     }
 
-    public function updateHelpRequest( $id,  $data)
+    public function updateHelpRequest($id,  $data)
     {
         $helpRequest = HelpRequest::findOrFail($id);
 
@@ -79,7 +79,7 @@ public function getAllHelpRequests()
         }
     }
 
-    public function deleteHelpRequest( $id)
+    public function deleteHelpRequest($id)
     {
         $helpRequest = HelpRequest::findOrFail($id);
 
@@ -92,11 +92,23 @@ public function getAllHelpRequests()
             // حذف الكاش بعد الحذف
             $cacheKey = "help_requests_college_{$helpRequest->college_id}_university_{$helpRequest->university_id}";
             Cache::forget($cacheKey);
-            
             return true;
         } catch (\Exception $e) {
             DB::rollBack();
             throw $e;
         }
     }
+
+    public function getHelpRequestByUserId($id)
+    {
+        try {
+                return HelpRequest::with(['user', 'comments.user'])
+                    ->where('user_id', $id)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+        } catch (\Exception $e) {
+            throw new \Exception('Help request not found');
+        }
+    }
+
 }
