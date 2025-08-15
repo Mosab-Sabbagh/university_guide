@@ -8,7 +8,9 @@
         <div class="row">
             <div class="col-md-12">
                 @if($bookRequests->isEmpty())
-                    <p>لا توجد عروضي في سوق الكتب.</p>
+                    <div class="alert alert-info" role="alert">
+                        لا توجد طلبات في سوق الكتب.
+                    </div>
                 @else
                     <table class="table table-bordered">
                         <thead>

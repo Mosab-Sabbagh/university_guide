@@ -3,6 +3,7 @@
 namespace App\Services\Student;
 
 use App\Events\BookRequestAccepted;
+use App\Models\BookPost;
 use App\Models\BookRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -21,6 +22,9 @@ class BookRequestService
     public function getBookRequestByPostId($post_id)
     {
         return BookRequest::where('book_post_id', $post_id)
+            ->whereHas('bookPost', function ($query) {
+                $query->where('user_id', Auth::user()->id); // يجيب بس لو الكتاب تبع المستخدم الحالي
+            })
             ->with(['user', 'bookPost'])
             ->orderBy('created_at', 'desc')
             ->get();
