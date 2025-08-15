@@ -60,7 +60,7 @@
                                 </div>
                                 <div class="d-flex align-items-center">
                                     <i class="fas fa-calendar-alt me-2 text-secondary"></i>
-                                    <small class="text-nowrap">{{ $post->created_at->diffForHumans() }}</small>
+                                    <small class="text-nowrap">{{ $post->created_at ? $post->created_at->diffForHumans() : '' }}</small>
                                 </div>
                                 <div class="d-flex align-items-center">
                                     <i class="fas fa-envelope me-2 text-secondary"></i>

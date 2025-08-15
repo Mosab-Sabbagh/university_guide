@@ -10,6 +10,8 @@
                     placeholder="ابحث عن مدرس بالاسم أو البريد..." value="{{ request('search') }}">
                 <button class="btn btn-primary" type="submit">
                     <i class="fas fa-search"></i>
+                    <button class="btn btn-secondary" type="reset" onclick="window.location.href='{{ route('student.teachers.index') }}'">
+                        <i class="fas fa-times"></i> إلغاء
                 </button>
             </div>
         </form>

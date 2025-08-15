@@ -13,7 +13,7 @@
                 <input type="text" name="search" value="{{ request('search') }}" class="form-control"
                     placeholder="ابحث باسم الكتاب أو عنوانه">
                 <button class="btn btn-primary" type="submit">بحث</button>
-                <a href="{{ route('admin.books.index') }}" class="btn btn-secondary">رجوع</a>
+                <a href="{{ route('student.books.index') }}" class="btn btn-secondary">رجوع</a>
             </div>
         </form>
 
