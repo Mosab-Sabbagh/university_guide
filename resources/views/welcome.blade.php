@@ -118,12 +118,46 @@
                 منصة "دليلي الجامعي" تساعدك في الوصول إلى كل ما تحتاجه من ملخصات، مساقات، سوق الكتب، والذكاء الاصطناعي
                 الأكاديمي، لتنجح في رحلتك الجامعية. </p>
             <div class="mt-10 flex justify-center gap-4 flex-wrap animate__animated animate__zoomIn animate__delay-2s">
-                <a href="{{route('register')}}"
+                {{-- <a href="{{route('register')}}"
                     class="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-green-800 transition">ابدأ
-                    الآن</a>
-                <a href="{{route('login')}}"
-                    class="border border-primary text-primary px-6 py-3 rounded-lg font-medium hover:bg-primary hover:text-white transition">تسجيل
-                    الدخول</a>
+                    الآن</a> --}}
+                {{-- <a href="{{route('login')}}"
+                    class="border border-primary text-primary px-6 py-3 rounded-lg font-medium hover:bg-primary hover:text-white transition">
+
+                    تسجيل
+
+                    الدخول</a> --}}
+                @auth
+                    @php
+                        $userType = Auth::user()->user_type;
+                    @endphp
+
+                    @if ($userType === 'super_admin')
+                        <a href="{{ route('super_admin.dashboard') }}"
+                            class="border border-primary text-primary px-6 py-3 rounded-lg font-medium hover:bg-primary hover:text-white transition">
+                            لوحة التحكم
+                        </a>
+                    @elseif ($userType === 'student')
+                        <a href="{{ route('student.help_requests.index') }}"
+                            class="border border-primary text-primary px-6 py-3 rounded-lg font-medium hover:bg-primary hover:text-white transition">
+                            دخول المنصة
+                        </a>
+                    @else
+                        <span class="text-danger font-semibold">نوع مستخدم غير معروف</span>
+                    @endif
+                @else
+
+                    <a href="{{route('register')}}"
+                        class="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-green-800 transition">ابدأ
+                        الآن</a>
+                    <a href="{{route('login')}}"
+                        class="border border-primary text-primary px-6 py-3 rounded-lg font-medium hover:bg-primary hover:text-white transition">
+
+                        تسجيل
+                        الدخول
+                    </a>
+                @endauth
+
             </div>
         </div>
         <div class="absolute -bottom-10 left-10 w-40 h-40 bg-green-200 rounded-full blur-3xl opacity-30 animate-pulse">
@@ -180,25 +214,26 @@
                 <!-- إحصائية 1 -->
                 <div>
                     <div class="text-5xl mb-2 text-primary">💡</div>
-                    <p class="text-4xl font-bold counter text-primary" data-target="970">0</p>
+                    <p class="text-4xl font-bold counter text-primary" data-target="{{ $post_count }}">0</p>
                     <p class="mt-2 text-primary">منشور ومنتفع</p>
                 </div>
                 <!-- إحصائية 2 -->
                 <div>
                     <div class="text-5xl mb-2">📖</div>
-                    <p class="text-4xl font-bold counter" data-target="243">0</p>
-                    <p class="mt-2">مساق مراجع</p>
+                    <p class="text-4xl font-bold counter" data-target="{{ $summary_count }}">0</p>
+                    <p class="mt-2">مساق ملخص</p>
                 </div>
                 <!-- إحصائية 3 -->
                 <div>
                     <div class="text-5xl mb-2">👥</div>
-                    <p class="text-4xl font-bold counter" data-target="7275">0</p>
+                    <p class="text-4xl font-bold counter" data-target="{{ $student_count }}">0</p>
                     <p class="mt-2">طالب مسجل</p>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- سلايدر الجامعات -->
     <!-- سلايدر الجامعات -->
     <section class="bg-white py-16 px-4" id="university-slider">
         <h2 class="text-3xl font-bold text-center text-primary mb-10">الجامعات المشاركة</h2>
@@ -209,71 +244,35 @@
                 class="absolute left-0 top-1/2 -translate-y-1/2 bg-primary text-white p-2 rounded-full z-10 shadow-md hidden md:block hover:bg-green-800">◀</button>
 
             <div class="flex overflow-x-auto scroll-smooth gap-6 pb-4 px-2 scrollbar-hide" id="university-carousel">
-                <!-- جامعة 1 -->
-                <div
-                    class="shrink-0 bg-gray-50 shadow-md rounded-lg p-4 min-w-[200px] text-center flex items-center space-x-4">
-                    <img src="image/iug.jpg" alt="الجامعة الإسلامية" class="w-16 h-16">
-                    <p class="text-primary font-semibold whitespace-nowrap">الجامعة الإسلامية</p>
-                </div>
-                <div
-                    class="shrink-0 bg-gray-50 shadow-md rounded-lg p-4 min-w-[200px] text-center flex items-center space-x-4">
-                    <img src="image/aug.jpg" alt="جامعة الازهر" class="w-16 h-16">
-                    <p class="text-primary font-semibold whitespace-nowrap">جامعة الازهر</p>
-                </div>
-                <div
-                    class="shrink-0 bg-gray-50 shadow-md rounded-lg p-4 min-w-[200px] text-center flex items-center space-x-4">
-                    <img src="image/الاقصي.jpg" alt="جامعة الاقصي" class="w-16 h-16">
-                    <p class="text-primary font-semibold whitespace-nowrap">جامعة الاقصي</p>
-                </div>
-                <div
-                    class="shrink-0 bg-gray-50 shadow-md rounded-lg p-4 min-w-[200px] text-center flex items-center space-x-4">
-                    <img src="image/القدس.png" alt="جامعة القدس" class="w-16 h-16">
-                    <p class="text-primary font-semibold whitespace-nowrap">جامعة القدس</p>
-                </div>
-                <div
-                    class="shrink-0 bg-gray-50 shadow-md rounded-lg p-4 min-w-[200px] text-center flex items-center space-x-4">
-                    <img src="image/النجاح.png" alt="جامعة النجاح" class="w-16 h-16">
-                    <p class="text-primary font-semibold whitespace-nowrap">جامعة النجاح</p>
-                </div>
-                <!-- جامعة 1نسخة -->
-                <div
-                    class="shrink-0 bg-gray-50 shadow-md rounded-lg p-4 min-w-[200px] text-center flex items-center space-x-4">
-                    <img src="image/iug.jpg" alt="الجامعة الإسلامية" class="w-16 h-16">
-                    <p class="text-primary font-semibold whitespace-nowrap">الجامعة الإسلامية</p>
-                </div>
-                <div
-                    class="shrink-0 bg-gray-50 shadow-md rounded-lg p-4 min-w-[200px] text-center flex items-center space-x-4">
-                    <img src="image/aug.jpg" alt="جامعة الازهر" class="w-16 h-16">
-                    <p class="text-primary font-semibold whitespace-nowrap">جامعة الازهر</p>
-                </div>
-                <div
-                    class="shrink-0 bg-gray-50 shadow-md rounded-lg p-4 min-w-[200px] text-center flex items-center space-x-4">
-                    <img src="image/الاقصي.jpg" alt="جامعة الاقصي" class="w-16 h-16">
-                    <p class="text-primary font-semibold whitespace-nowrap">جامعة الاقصي</p>
-                </div>
-                <div
-                    class="shrink-0 bg-gray-50 shadow-md rounded-lg p-4 min-w-[200px] text-center flex items-center space-x-4">
-                    <img src="image/القدس.png" alt="جامعة القدس" class="w-16 h-16">
-                    <p class="text-primary font-semibold whitespace-nowrap">جامعة القدس</p>
-                </div>
-                <div
-                    class="shrink-0 bg-gray-50 shadow-md rounded-lg p-4 min-w-[200px] text-center flex items-center space-x-4">
-                    <img src="image/النجاح.png" alt="جامعة النجاح" class="w-16 h-16">
-                    <p class="text-primary font-semibold whitespace-nowrap">جامعة النجاح</p>
-                </div>
+                @foreach($universities as $university)
+                    <div
+                        class="shrink-0 bg-gray-50 shadow-md rounded-lg p-4 min-w-[200px] text-center flex items-center space-x-4">
+                        @if($university->logo)
+                            <img src="{{ route('university.logo', ['filename' => basename($university->logo)]) }}"
+                                alt="{{ $university->name_ar }}" class="w-16 h-16"
+                                onerror="this.onerror=null;this.src='{{ asset('images/default-logo.png') }}'">
+                        @else
+                            <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
+                                <span class="text-xs text-gray-500">لا يوجد شعار</span>
+                            </div>
+                        @endif
+                        <p class="text-primary font-semibold whitespace-nowrap">{{ $university->name_ar }}</p>
+                    </div>
+                @endforeach
             </div>
-
-            <style>
-                .scrollbar-hide::-webkit-scrollbar {
-                    display: none;
-                }
-
-                .scrollbar-hide {
-                    -ms-overflow-style: none;
-                    scrollbar-width: none;
-                }
-            </style>
+        </div>
     </section>
+
+    <style>
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
     <!-- CTA -->
     <section class="py-20 bg-gradient-to-r from-primary to-green-700 text-white text-center">
         <h3 class="text-3xl font-bold mb-4">سجّل الآن وابدأ مستقبلك الأكاديمي معنا</h3>
@@ -284,7 +283,7 @@
 
     <!-- Footer -->
     <footer class="bg-white py-6 text-center text-sm text-gray-500">
-        جميع الحقوق محفوظة © 2025 - دليلي الجامعي
+        جميع الحقوق محفوظة © {{ date('Y') }} - دليلي الجامعي
     </footer>
 
     <!-- Animate.css CDN -->
