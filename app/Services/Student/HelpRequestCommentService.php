@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class HelpRequestCommentService
 {
@@ -55,30 +56,37 @@ class HelpRequestCommentService
         return $comment;
     }
 
-    public function deleteComment(HelpRequestComment $comment)
-    {
-        $helpRequestId = $comment->help_request_id;
+public function deleteComment(HelpRequestComment $comment)
+{
+    $helpRequestId = $comment->help_request_id;
 
-        DB::beginTransaction();
-        try {
-            $comment->delete();
-
-            DB::commit();
-
-            // حذف الكاش عند حذف تعليق
-            $this->forgetHelpRequestCache($helpRequestId);
-
-            return true;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('Error deleting help request comment: ' . $e->getMessage(), [
-                'user_id' => Auth::id(),
-                'help_request_id' => $helpRequestId,
-                'exception' => $e,
-            ]);
-            throw $e;
+    DB::beginTransaction();
+    try {
+        // اذا في ملف مرتبط بالتعليق نحذفه من التخزين
+        if ($comment->file && Storage::exists($comment->file)) {
+            Storage::delete($comment->file);
         }
+
+        // حذف التعليق نفسه
+        $comment->delete();
+
+        DB::commit();
+
+        // حذف الكاش عند حذف تعليق
+        $this->forgetHelpRequestCache($helpRequestId);
+
+        return true;
+    } catch (\Exception $e) {
+        DB::rollBack();
+        Log::error('Error deleting help request comment: ' . $e->getMessage(), [
+            'user_id' => Auth::id(),
+            'help_request_id' => $helpRequestId,
+            'exception' => $e,
+        ]);
+        throw $e;
     }
+}
+
 
     // دالة لحذف الكاش المرتبط بطلب المساعدة
     protected function forgetHelpRequestCache($helpRequestId)
