@@ -7,7 +7,7 @@
             <h5 class="mb-0">إضافة جامعة جديدة</h5>
         </div>
         <div class="card-body">
-            <form action="{{ route('super_admin.university.store') }}" method="POST">
+            <form action="{{ route('super_admin.university.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="mb-3">
                     <label for="name_ar" class="form-label">اسم الجامعة (عربي):</label>
@@ -27,6 +27,13 @@
                     <label for="abbreviation" class="form-label">الاختصار:</label>
                     <input type="text" class="form-control @error('abbreviation') is-invalid @enderror" id="abbreviation" name="abbreviation" value="{{ old('abbreviation') }}">
                     @error('abbreviation')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="mb-3">
+                    <label for="logo" class="form-label">شعار الجامعة:</label>
+                    <input type="file" class="form-control @error('logo') is-invalid @enderror" id="logo" name="logo" accept="image/*">
+                    @error('logo')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>

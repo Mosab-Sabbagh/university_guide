@@ -19,6 +19,7 @@ class University extends Model
         'email',
         'phone',
         'description',
+        'logo', 
     ];
 
     public function colleges()

@@ -27,6 +27,7 @@ class UniversityRequest extends FormRequest
             'name_ar' => 'required|string|max:255',
             'name_en' => 'required|string|max:255',
             'abbreviation' => 'nullable|string|max:50',
+            'logo' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
             'city' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',
             'website' => 'nullable|string|max:255',

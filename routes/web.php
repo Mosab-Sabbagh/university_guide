@@ -1,16 +1,30 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SuperAdmin\HomeController;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\File;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+Route::get('/university-logos/{filename}', function($filename) {
+    $path = 'universities/logos/' . $filename;
+    $fullPath = storage_path('app/public/' . $path);
+    
+    if (!File::exists($fullPath)) {
+        abort(404);
+    }
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    return response()->file($fullPath);
+})->name('university.logo');
+
+Route::get('/', [HomeController::class,'index'])->name('welcome');
+
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
