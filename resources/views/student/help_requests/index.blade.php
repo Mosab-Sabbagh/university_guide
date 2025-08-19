@@ -118,6 +118,11 @@
                                 <div class="comment-body">
                                     <span class="comment-author">{{ $comment->user->name }}:</span>
                                     <span class="comment-content">{{ $comment->content }}</span>
+                                        @if($comment->file)
+                                            <div class="comment-file">
+                                                <a href="{{ asset('storage/' . $comment->file) }}" download>📎 تحميل المرفق</a>
+                                            </div>
+                                        @endif
                                 </div>
                             </div>
                             @if(Auth::id() === $comment->user_id)
