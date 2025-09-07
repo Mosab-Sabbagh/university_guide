@@ -36,3 +36,4 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::put('/teacher/update/{teacher_id}', [TeacherController::class, 'update'])->name('admin.teacher.update');
     Route::delete('/teacher/delete/{teacher_id}', [TeacherController::class, 'destroy'])->name('admin.teacher.delete');
 });
+Route::get('/export-summaries', [AdminDashbordController::class, 'exportSummaryToJsonToD'])->name('admin.export.summaries');
