@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ExportDataToAi;
 use App\Http\Controllers\SuperAdmin\AdminController;
 use App\Http\Controllers\SuperAdmin\CollegeController;
 use App\Http\Controllers\SuperAdmin\MajorController;
@@ -96,6 +97,14 @@ Route::prefix('super-admin')->middleware(['auth', 'super_admin'])->group(functio
     Route::get('users', [AdminController::class, 'index'])->name('super_admin.students.index');
     Route::patch('users/{user}/promote', [AdminController::class, 'promoteToAdmin'])->name('super_admin.admin.promote');
     Route::patch('/admins/revoke/{user}', [AdminController::class, 'revoke'])->name('super_admin.admin.revoke');
+    //Export Data To Ai by zyad
+    Route::get('/export-summaries', [ExportDataToAi::class, 'Summary'])->name('admin.export.summaries');
+    Route::get('/export-Book', [ExportDataToAi::class, 'Book'])->name('admin.export.Book');
+    Route::get('/export-University', [ExportDataToAi::class, 'University'])->name('admin.export.University');
+    Route::get('/export-College', [ExportDataToAi::class, 'College'])->name('admin.export.College');
+    Route::get('/export-Major', [ExportDataToAi::class, 'Major'])->name('admin.export.Major');
+    Route::get('/export-Course', [ExportDataToAi::class, 'Course'])->name('admin.export.Course');
+
 });
 
 
