@@ -26,20 +26,4 @@ public function index(AdminDashbordService $dashboardService)
     ]);
 }
 
-public function exportSummaryToJsonToD()
-{
-    // 1. جلب البيانات من قاعدة البيانات
-    $summary = Summary::select('title', 'description')->get();
-
-    // 2. تحويلها إلى JSON
-    $jsonData = json_encode($summary, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-
-    // 3. تحديد مسار الحفظ على قرص D
-    $filePath = 'D:/summary.json'; // غير الاسم حسب رغبتك
-
-    // 4. حفظ الملف
-    File::put($filePath, $jsonData);
-
-    return "تم إنشاء الملف في: " . $filePath;
-}
 }

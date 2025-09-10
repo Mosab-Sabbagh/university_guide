@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\SummaryAdminController;
 use App\Http\Controllers\Admin\AdminDashbordController;
 use App\Http\Controllers\Admin\EBookController;
 use App\Http\Controllers\Admin\TeacherController;
+use App\Http\Controllers\ExportDataToAi;
 
 Route::get('/admin', [AdminDashbordController::class, 'index'])->middleware(['auth', 'admin'])->name('admin.dashboard');
 
@@ -36,4 +37,3 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::put('/teacher/update/{teacher_id}', [TeacherController::class, 'update'])->name('admin.teacher.update');
     Route::delete('/teacher/delete/{teacher_id}', [TeacherController::class, 'destroy'])->name('admin.teacher.delete');
 });
-Route::get('/export-summaries', [AdminDashbordController::class, 'exportSummaryToJsonToD'])->name('admin.export.summaries');

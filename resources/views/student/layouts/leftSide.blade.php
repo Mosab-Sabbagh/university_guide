@@ -38,36 +38,35 @@
     </div> --}}
     <!-- AI Chat Widget (Floating) -->
     <div id="chat-widget-fab" style="position: fixed; bottom: 20px; left: 20px; z-index: 1001; display: flex; align-items: center; flex-direction: row-reverse;">
-    <button id="chat-widget-button" style="
-        background: linear-gradient(135deg, #28a745, #7de67e);
-        color: white;
-        border: none;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        cursor: pointer;
-        font-size: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.2);">
-            <i class="fa fa-robot"></i>
-            </button>
-    <span id="chat-widget-tooltip" style="
-        opacity:0;
-        visibility:hidden;
-        transition:opacity 0.2s,visibility 0.2s;
-        background: linear-gradient(135deg, #28a745, #7de67e);
-        color:#fff;
-        padding:7px 16px;
-        border-radius:8px;
-        margin-left:10px;
-        font-size:15px;
-        white-space:nowrap;
-        pointer-events:none;
-    ">
-    دردش مع شات المنصة
-    </span>
+        <button id="chat-widget-button" style="
+            background: linear-gradient(135deg, #28a745, #7de67e);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);">
+                <i class="fa fa-robot"></i>
+                </button>
+        <span id="chat-widget-tooltip" style="
+            opacity:0;
+            visibility:hidden;
+            transition:opacity 0.2s,visibility 0.2s;
+            background: linear-gradient(135deg, #28a745, #7de67e);
+            color:#fff;
+            padding:7px 16px;
+            border-radius:8px;
+            margin-left:10px;
+            font-size:15px;
+            white-space:nowrap;
+            pointer-events:none;">
+                دردش مع شات المنصة
+        </span>
     </div>
     <div id="chat-widget-container" style="position: fixed; bottom: 20px; left: 20px; width: 350px; height: 500px; background: #fff; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: none; flex-direction: column; z-index: 1000; overflow: hidden; border: 1px solid #e0e0e0;">
     <div id="chat-widget-header" style="
@@ -98,7 +97,6 @@
                 Send</button>
         </div>
     </div>
-
     <!-- Chat Widget Script -->
     <script>
         // Tooltip hover logic
